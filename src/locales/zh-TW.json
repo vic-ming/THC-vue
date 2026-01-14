@@ -1,0 +1,72 @@
+{
+    "menu": {
+        "home": "首頁",
+        "language": "English",
+        "coopLandmark": "銷售據點",
+        "groupVideo": "集團影片",
+        "introduction": "關於本廠",
+        "video": "訪廠影片",
+        "video360": "360度影片",
+        "return": "回上一層",
+        "returnToFinder": "返回篩選"
+    },
+    "location": {
+        "finder": "據點查詢",
+        "global": "全球據點",
+        "clean": "清除據點篩選"
+    },
+    "factory": {
+        "establishmentDate": "設立日期：",
+        "landArea": "佔地面積",
+        "factoryArea": "廠房面積",
+        "numberOfEmployees": "員工人數",
+        "annualProduction": "年產值",
+        "inHouse": "(In-house廠)"
+    },
+    "stats": {
+        "total": "集團總產能",
+        "employees": "全球員工數",
+        "productionBases": "全球生產基地",
+        "revenue2024": "2024營收",
+        "annualCapacity": "每年可生產",
+        "employeeCount": "5,065",
+        "revenueAmount": "NTD 284億",
+        "plasticCaps": "539 億個塑蓋",
+        "preforms": "231 億支瓶胚",
+        "clawCaps": "16 億個爪蓋",
+        "aluminumCaps": "43 億個鋁蓋",
+        "bottles": "116 億支瓶子",
+        "beverageFilling": "48 億瓶飲料充填",
+        "labels": "113 億片標籤",
+        "people": "人",
+        "billion": "億"
+    },
+    "regions": {
+        "japan": "日本",
+        "taiwan": "台灣",
+        "china": "中國大陸"
+    },
+    "taiwan": {
+        "headquarters": "集團總部",
+        "taichung1": "台中一廠",
+        "taichung2": "台中二廠",
+        "taichungAseptic1": "台中無菌飲料一廠",
+        "taichungAseptic2": "台中無菌飲料二廠",
+        "taichungAseptic3": "台中無菌飲料三廠",
+        "uniRuifang": "統一瑞芳廠",
+        "cocaColaTaoyuan": "可口可樂桃園廠",
+        "kuangChuanChiayi": "光泉嘉義廠",
+        "vedanShalu": "味丹沙鹿廠",
+        "taichungFreeTrade": "台中自貿廠園區"
+    },
+    "china": {
+        "headquarters": "(大陸總部)",
+        "suzhouHonChuan": "蘇州宏全",
+        "suzhouHongxin": "蘇州宏星廠",
+        "hunanChangsha": "湖南長沙廠",
+        "shanxiTaiyuan": "山西太原廠",
+        "shandongJinan": "山東濟南廠",
+        "guangdongQingxin": "廣東清新無菌飲料廠",
+        "fujianZhangzhou": "福建漳州無菌飲料廠"
+    }
+}

@@ -1,0 +1,72 @@
+{
+    "menu": {
+        "home": "Home",
+        "language": "中文",
+        "coopLandmark": "Coop Landmark",
+        "groupVideo": "Group Video",
+        "introduction": "Introduction",
+        "video": "Video",
+        "video360": "360° Video",
+        "return": "Return",
+        "returnToFinder": "Return to Finder"
+    },
+    "location": {
+        "finder": "Location Finder",
+        "global": "Global",
+        "clean": "Clean Global filter"
+    },
+    "factory": {
+        "establishmentDate": "Establishment Date: ",
+        "landArea": "Land Area",
+        "factoryArea": "Factory Area",
+        "numberOfEmployees": "Number of Employees",
+        "annualProduction": "Annual production",
+        "inHouse": "(In-house)"
+    },
+    "stats": {
+        "total": "Total",
+        "employees": "EMPLOYEES",
+        "productionBases": "PRODUCTION BASES",
+        "revenue2024": "REVENUE IN 2024",
+        "annualCapacity": "ANNUAL CAPACITY",
+        "employeeCount": "5,065",
+        "revenueAmount": "USD 888 MILLION",
+        "plasticCaps": "57.4 BILLION",
+        "preforms": "23.2 BILLION",
+        "clawCaps": "1,500 MILLION",
+        "aluminumCaps": "4,300 MILLION",
+        "bottles": "11.8 BILLION",
+        "beverageFilling": "4.8 BILLION",
+        "labels": "13.3 MILLION",
+        "people": " ",
+        "billion": "billion"
+    },
+    "regions": {
+        "japan": "Japan",
+        "taiwan": "Taiwan",
+        "china": "China"
+    },
+    "taiwan": {
+        "headquarters": "Group Headquarters",
+        "taichung1": "Taichung 1st Plant",
+        "taichung2": "Taichung 2nd Plant",
+        "taichungAseptic1": "Taichung 1st Aseptic-filling Plant",
+        "taichungAseptic2": "Taichung 2nd Aseptic-filling Plant",
+        "taichungAseptic3": "Taichung 3rd Aseptic-filling Plant",
+        "uniRuifang": "Uni-President Ruifang Plant",
+        "cocaColaTaoyuan": "Coca-Cola Taoyuan Plant",
+        "kuangChuanChiayi": "Kuang Chuan Chaiyi Plant",
+        "vedanShalu": "Vedan Taichung Plant",
+        "taichungFreeTrade": "Taichung Free Trade Aseptic-filling Plant"
+    },
+    "china": {
+        "headquarters": "(China Headquarters)",
+        "suzhouHonChuan": "Suzhou Hon Chuan Plant",
+        "suzhouHongxin": "Suzhou Hongxin Plant",
+        "hunanChangsha": "Hunan Changsha Plant",
+        "shanxiTaiyuan": "Shanxi Taiyuan Plant",
+        "shandongJinan": "Shandong Jinan Plant",
+        "guangdongQingxin": "Guangdong Qingxin Aseptic-filling Plant",
+        "fujianZhangzhou": "Fujian Zhangzhou Aseptic-filling Plant"
+    }
+}
