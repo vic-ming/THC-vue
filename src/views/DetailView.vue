@@ -52,7 +52,56 @@
           <div class="country">印尼</div>
           <div class="address">41361 Industrial VI Lot PD Road 13-15, Margamulya Village/Sub-district, West Telukjambe District, Karawang Regency, West Java Province, Indonesia</div>
         </div>
+        
+        <div class="detail-swiper">
+          <swiper
+            ref="swiperRef"
+            :modules="swiperModules"
+            :slides-per-view="1"
+            :space-between="0"
+            :navigation="{
+              nextEl: '.swiper-button-next',
+              prevEl: '.swiper-button-prev',
+            }"
+            :pagination="{
+              clickable: true,
+              el: '.swiper-pagination',
+            }"
+            :loop="true"
+            class="factory-swiper"
+            @slideChange="onSlideChange"
+          >
+            <swiper-slide v-for="(image, index) in factoryImages" :key="index">
+              <img :src="image" :alt="`Factory image ${index + 1}`" class="swiper-image">
+            </swiper-slide>
+            
+            <!-- Custom Navigation Buttons -->
+            <div class="swiper-button-prev">
+              <img src="/icon/arrow-icon-yellow.svg" alt="arrow-icon-yellow">
+            </div>
+            <div class="swiper-button-next">
+              <img src="/icon/arrow-icon-yellow.svg" alt="arrow-icon-yellow" class="rotate-180">
+            </div>
+            
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+          </swiper>
 
+          <!-- Thumbnail Images -->
+          <div class="thumbnail-container">
+            <div 
+              v-for="(image, index) in factoryImages.slice(0, 4)" 
+              :key="index"
+              class="thumbnail-item"
+              :class="{ 'active': index === activeSlideIndex }"
+              @click="goToSlide(index)"
+            >
+              <img :src="image" :alt="`Thumbnail ${index + 1}`">
+            </div>
+          </div>
+
+         
+        </div>
         <div class="detail-chart">
           <img src="/chart-info-example.svg" alt="chart">
         </div>
@@ -61,20 +110,26 @@
       <!-- 訪廠影片 -->
       <div v-if="selectedMenu === 'video'" class="common-content">
         <div class="video-content">
-          <video class="w-full h-full object-cover rounded-[24px]" controls autoplay loop muted>
-            <source src="/example.mp4" type="video/mp4">
-            您的瀏覽器不支援影片播放。
-          </video>
+          <video-player
+            ref="videoPlayerRef"
+            class="video-player"
+            src="/example.mp4"
+            :options="playerOptions"
+            @mounted="onPlayerMounted"
+          />
         </div>
         <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
       </div>
       <!-- 360 影片 -->
       <div v-if="selectedMenu === 'video360'" class="common-content">
         <div class="video-content">
-          <video class="w-full h-full object-cover rounded-[24px]" controls autoplay loop muted>
-            <source src="/example.mp4" type="video/mp4">
-            您的瀏覽器不支援影片播放。
-          </video>
+          <video-player
+            ref="video360PlayerRef"
+            class="video-player"
+            src="/example.mp4"
+            :options="playerOptions"
+            @mounted="onPlayerMounted"
+          />
         </div>
         <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
       </div>
@@ -85,13 +140,41 @@
 import { useRouter } from 'vue-router'
 import Layout from '../components/layout/layout.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, ref } from 'vue'
+import { computed, ref, reactive } from 'vue'
+import { VideoPlayer } from '@videojs-player/vue'
+import 'video.js/dist/video-js.css'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
 
 const router = useRouter()
 const { t, locale } = useI18n()
 
 // 選中的選單項目
 const selectedMenu = ref('introduction')
+
+// Video player refs
+const videoPlayerRef = ref(null)
+const video360PlayerRef = ref(null)
+
+// 播放器配置
+const playerOptions = reactive({
+  autoplay: true,
+  muted: false,
+  loop: false,
+  controls: true,
+  fluid: false,
+  fill: true,
+  language: 'zh-TW'
+})
+
+// 播放器掛載完成
+const onPlayerMounted = (player) => {
+  console.log('Player mounted:', player)
+}
+
 
 // 語系切換函數
 const toggleLanguage = () => {
@@ -101,6 +184,40 @@ const toggleLanguage = () => {
 
 // 可置換的頂部圖片
 const topImage = ref('/top-img-example.jpg')
+
+// Swiper modules
+const swiperModules = [Navigation, Pagination]
+const swiperRef = ref(null)
+const activeSlideIndex = ref(0)
+
+// Factory images for the carousel
+const factoryImages = ref([
+  '/top-img-example.jpg',
+  '/top-img-example.jpg',
+  '/top-img-example.jpg',
+  '/top-img-example.jpg',
+])
+
+// Handle slide change
+const onSlideChange = (swiper) => {
+  // Get the real index (not the loop index)
+  activeSlideIndex.value = swiper.realIndex
+}
+
+// Go to specific slide
+const goToSlide = (index) => {
+  console.log('goToSlide called with index:', index)
+  console.log('swiperRef.value:', swiperRef.value)
+  
+  if (swiperRef.value && swiperRef.value.$el) {
+    const swiper = swiperRef.value.$el.swiper
+    console.log('swiper instance:', swiper)
+    if (swiper) {
+      swiper.slideTo(index)
+      activeSlideIndex.value = index
+    }
+  }
+}
 
 // 詳情頁選單項目
 const detailMenuItems = [
@@ -219,8 +336,70 @@ const rightMenu = computed(() => [
   }
 }
 
+.detail-swiper{
+  @apply fixed top-[370px] left-[58px] w-[662px] z-[3];
+}
+
 .detail-chart{
   @apply fixed top-[376px] left-[840px] w-[768px] h-[572px];
+}
+
+.factory-swiper {
+  @apply w-full h-[372px] rounded-[24px] overflow-hidden;
+  border: 6px solid #2B74C6;
+  box-shadow: 4.5px 8.25px 7.05px 0px #00000040;
+}
+
+.swiper-image {
+  @apply w-full h-full object-cover;
+}
+
+/* Custom Navigation Buttons */
+.factory-swiper :deep(.swiper-button-prev),
+.factory-swiper :deep(.swiper-button-next) {
+  @apply w-[32px] h-[32px] rounded-full absolute z-[11];
+
+}
+.factory-swiper :deep(.swiper-button-prev){
+  @apply bottom-[10px] right-[61px] left-[auto] top-[auto];
+}
+.factory-swiper :deep(.swiper-button-next){
+  @apply bottom-[10px] right-[13px] left-[auto] top-[auto];
+}
+
+/* Pagination Dots */
+.factory-swiper :deep(.swiper-pagination) {
+  bottom: 15px !important;
+}
+
+.factory-swiper :deep(.swiper-pagination-bullet) {
+  @apply w-[15px] h-[15px] bg-[#2B74C6] opacity-100 mx-[6px];
+  transition: all 0.3s ease;
+}
+
+.factory-swiper :deep(.swiper-pagination-bullet-active) {
+  @apply w-[15px] opacity-100;
+  background: #C6E0F1;
+}
+
+/* Thumbnail Container */
+.thumbnail-container {
+  @apply h-[96px] flex gap-[16px] mt-[16px] justify-between items-center;
+}
+
+.thumbnail-item {
+  @apply w-[137px] h-[85px] rounded-[18px] overflow-hidden cursor-pointer;
+  border: 2px solid #2B74C6;
+  box-shadow: 2px 0px 8px 0px #00000066;
+  transition: all 0.3s ease;
+}
+
+.thumbnail-item.active {
+  @apply w-[155px] h-[96px] ;
+}
+
+.thumbnail-item img {
+  @apply w-full h-full object-cover;
 }
 
 .common-content{
@@ -229,6 +408,15 @@ const rightMenu = computed(() => [
     @apply relative z-[2] h-full w-[1577px] border-[8px] border-[#FFC936] rounded-[32px] flex items-center justify-center;
     box-shadow: 2px 0px 8px 0px #00000066;
     background-color: #fff;
+  }
+
+  .video-player {
+    @apply w-full h-full rounded-[24px] overflow-hidden;
+    
+    :deep(.vjs-tech) {
+      object-fit: cover;
+      border-radius: 24px;
+    }
   }
   
 }
