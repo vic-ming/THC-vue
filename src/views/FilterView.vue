@@ -2,77 +2,69 @@
   <Layout>
     <div class="container">
       <!-- 全球地圖 -->
-      <img v-if="selectedRegion === ''" class="map-img" src="/map/world.svg" alt="map">
-
-      <!-- 台灣 -->
-      <img v-else-if="selectedRegion === '台灣'" class="map-img" src="/map/taiwan.svg" alt="map" @click="router.push('/detail')">
-      <!-- 中國大陸 -->
-      <img v-else-if="selectedRegion === '中國大陸'" class="map-img" src="/map/china.svg" alt="map" @click="router.push('/detail')">
-      <!-- 印尼 -->
-      <img v-else-if="selectedRegion === '印尼'" class="map-img" src="/map/indonesia.svg" alt="map" @click="router.push('/detail')">
-      <!-- 越南 -->
-      <img v-else-if="selectedRegion === '越南'" class="map-img" src="/map/vietnam.svg" alt="map" @click="router.push('/detail')">
-      <!-- 泰國 -->
-      <img v-else-if="selectedRegion === '泰国'" class="map-img" src="/map/thailand.svg" alt="map" @click="router.push('/detail')">
-      <!-- 馬來西亞 -->
-      <img v-else-if="selectedRegion === '马来西亚'" class="map-img" src="/map/malaysia.svg" alt="map" @click="router.push('/detail')">
-      <!-- 緬甸 -->
-      <img v-else-if="selectedRegion === '缅甸'" class="map-img" src="/map/myanmar.svg" alt="map" @click="router.push('/detail')">
-      <!-- 柬埔寨 -->
-      <img v-else-if="selectedRegion === '柬埔寨'" class="map-img" src="/map/cambodia.svg" alt="map" @click="router.push('/detail')">
-      <!-- 莫三比克 -->
-      <img v-else-if="selectedRegion === '莫三比克'" class="map-img" src="/map/mozambique.svg" alt="map" @click="router.push('/detail')">
+      <Transition name="map-zoom" mode="out-in" >
+        <img 
+          :key="currentMap"
+          class="map-img" 
+          :class="{ 'cursor-pointer': selectedRegion !== '' }"
+          :src="currentMap" 
+          alt="map" 
+          @click="handleMapClick"
+        >
+      </Transition>
 
       <!-- 右側選單 -->
-      <div class="filter-right-menu">
-        <button class="home-button" @click="router.push('/')">
-          <img class="w-[40px] h-[40px] absolute right-[-14px] top-[-18px] " src="/icon/menu-home.svg" alt="home">
-          {{ t('menu.home') }}
-        </button>
-        <div class="menu-inside">
-          <div class="filter-box">
-            <div class="filter-title">
-              產品及服務
-              <span @click="clearProductFilter">清除產品篩選</span>
-            </div>
-            <div class="filter-list">
-              <div 
-                class="filter-item" 
-                :class="{
-                  'disabled': item.disabled,
-                  'selected': selectedProducts.includes(item.value)
-                }" 
-                v-for="item in filterTypeList" 
-                :key="item.value" 
-                @click="toggleProduct(item)"
-              >
-                {{ item.name }}
+      <Transition name="slide-in-right" appear>
+        <div class="filter-right-menu">
+          <button class="home-button" @click="router.push('/')">
+            <img class="w-[40px] h-[40px] absolute right-[-14px] top-[-18px] " src="/icon/menu-home.svg" alt="home">
+            {{ t('menu.home') }}
+          </button>
+          <div class="menu-inside">
+            <div class="filter-box">
+              <div class="filter-title" :class="{ '!text-[28px]': locale === 'en' }">
+                {{ t('filter.productsAndServices') }}
+                <span :class="{ '!text-[20px]': locale === 'en' }" @click="clearProductFilter">{{ t('filter.clearProductFilter') }}</span>
+              </div>
+              <div class="filter-list">
+                <div 
+                  class="filter-item" 
+                  :class="{
+                    'disabled': item.disabled,
+                    'selected': selectedProducts.includes(item.value)
+                  }" 
+                  v-for="item in filterTypeList" 
+                  :key="item.value" 
+                  @click="toggleProduct(item)"
+                >
+                  {{ item.name }}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="filter-box">
-            <div class="filter-title">
-              全球據點
-              <span @click="clearRegionFilter">清除據點篩選</span>
-            </div>
-            <div class="region-list">
-              <div 
-                class="region-item" 
-                :class="{'selected': selectedRegion === item.value, 'disabled': item.disabled}"
-                v-for="item in filterRegionList" 
-                :key="item.value"
-                @click="selectRegion(item)"
-              >
-                <img v-if="selectedRegion === item.value" src="/icon/arrow-icon-active.svg" alt="arrow">
-                <img v-else src="/icon/arrow-icon.svg" alt="arrow">
-                <span>{{ item.name }}({{ item.amount }})</span>
+            <div class="filter-box">
+              <div class="filter-title" :class="{ '!text-[28px]': locale === 'en' }">
+                {{ t('location.global') }}
+                <span :class="{ '!text-[20px]': locale === 'en' }" @click="clearRegionFilter">{{ t('location.clean') }}</span>
+              </div>
+              <div class="region-list">
+                <div 
+                  class="region-item" 
+                  :class="{'selected': selectedRegion === item.value, 'disabled': item.disabled}"
+                  v-for="item in filterRegionList" 
+                  :key="item.value"
+                  @click="selectRegion(item)"
+                >
+                  <img v-if="selectedRegion === item.value" src="/icon/arrow-icon-active.svg" alt="arrow">
+                  <img v-else src="/icon/arrow-icon.svg" alt="arrow">
+                  <span>{{ item.name }}({{ item.amount }})</span>
+                </div>
               </div>
             </div>
-          </div>
 
+          </div>
         </div>
-      </div>
+      </Transition>
 
     </div>
   </Layout>
@@ -90,6 +82,18 @@ const { t, locale } = useI18n()
 const selectedProducts = ref([])
 // 選中的據點（單選）
 const selectedRegion = ref('')
+
+const currentMap = computed(() => {
+  if (selectedRegion.value === '') return '/map/world.svg'
+  return `/map/${selectedRegion.value}.svg`
+})
+
+const handleMapClick = () => {
+  console.log('handleMapClick')
+  if (selectedRegion.value !== '') {
+    router.push('/detail')
+  }
+}
 
 // 切換產品選擇（多選）
 const toggleProduct = (item) => {
@@ -125,32 +129,54 @@ const clearRegionFilter = () => {
   console.log('Cleared region filter')
 }
 
-const filterTypeList = ref([
-  {'name': '爪蓋', 'value': '爪蓋', 'disabled': true},
-  {'name': '鋁蓋', 'value': '鋁蓋', 'disabled': false},
-  {'name': '塑蓋', 'value': '塑蓋', 'disabled': false},
-  {'name': '標籤', 'value': '標籤', 'disabled': false},
-  {'name': 'PET寶特瓶', 'value': 'PET寶特瓶', 'disabled': false},
-  {'name': '瓶胚', 'value': '瓶胚', 'disabled': false},
-  {'name': '無菌充填', 'value': '無菌充填', 'disabled': false},
-  {'name': '熱充填', 'value': '熱充填', 'disabled': false},
-  {'name': '水充填', 'value': '水充填', 'disabled': false},
-  {'name': '冷高壓充埴', 'value': '冷高壓充埴', 'disabled': false},
+const filterTypeList = computed(() => [
+  {'name': t('products.lugCap'), 'value': '爪蓋', 'disabled': true},
+  {'name': t('products.aluminumCap'), 'value': '鋁蓋', 'disabled': false},
+  {'name': t('products.plasticCap'), 'value': '塑蓋', 'disabled': false},
+  {'name': t('products.label'), 'value': '標籤', 'disabled': false},
+  {'name': t('products.petBottle'), 'value': 'PET寶特瓶', 'disabled': false},
+  {'name': t('products.preform'), 'value': '瓶胚', 'disabled': false},
+  {'name': t('products.asepticFilling'), 'value': '無菌充填', 'disabled': false},
+  {'name': t('products.hotFilling'), 'value': '熱充填', 'disabled': false},
+  {'name': t('products.waterFilling'), 'value': '水充填', 'disabled': false},
+  {'name': t('products.coldHighPressureFilling'), 'value': '冷高壓充填', 'disabled': false},
 ])
-const filterRegionList = ref([
-  {'name': '台灣', 'value': '台灣', amount: 10, disabled: false },
-  {'name': '中國大陸', 'value': '中國大陸', amount: 14, disabled: false },
-  {'name': '印尼', 'value': '印尼', amount: 7, disabled: false },
-  {'name': '越南', 'value': '越南', amount: 5, disabled: false },
-  {'name': '泰国', 'value': '泰国', amount: 5, disabled: false },
-  {'name': '马来西亚', 'value': '马来西亚', amount: 2, disabled: false },
-  {'name': '缅甸', 'value': '缅甸', amount: 4, disabled: false },
-  {'name': '柬埔寨', 'value': '柬埔寨', amount: 1, disabled: false },
-  {'name': '莫三比克', 'value': '莫三比克', amount: 0, disabled: true },
+const filterRegionList = computed(() => [
+  {'name': t('regions.taiwan'), 'value': 'taiwan', amount: 10, disabled: false },
+  {'name': t('regions.china'), 'value': 'china', amount: 14, disabled: false },
+  {'name': t('regions.indonesia'), 'value': 'indonesia', amount: 7, disabled: false },
+  {'name': t('regions.vietnam'), 'value': 'vietnam', amount: 5, disabled: false },
+  {'name': t('regions.thailand'), 'value': 'thailand', amount: 5, disabled: false },
+  {'name': t('regions.malaysia'), 'value': 'malaysia', amount: 2, disabled: false },
+  {'name': t('regions.myanmar'), 'value': 'myanmar', amount: 1, disabled: false },
+  {'name': t('regions.cambodia'), 'value': 'cambodia', amount: 1, disabled: false },
+  {'name': t('regions.mozambique'), 'value': 'mozambique', amount: 0, disabled: true },
 ])
 
 
 </script>
 <style scoped>
+.map-zoom-enter-active,
+.map-zoom-leave-active {
+  transition: all 1.2s ease-in-out;
+}
 
+.map-zoom-enter-from {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.map-zoom-leave-to {
+  opacity: 0;
+  transform: scale(1.2);
+}
+
+.slide-in-right-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.slide-in-right-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
 </style>

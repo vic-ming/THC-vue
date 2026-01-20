@@ -15,6 +15,10 @@
         "global": "Global",
         "clean": "Clean Global filter"
     },
+    "filter": {
+        "productsAndServices": "Products and Services",
+        "clearProductFilter": "Clear Product Filter"
+    },
     "factory": {
         "establishmentDate": "Establishment Date: ",
         "landArea": "Land Area",
@@ -44,7 +48,14 @@
     "regions": {
         "japan": "Japan",
         "taiwan": "Taiwan",
-        "china": "China"
+        "china": "China",
+        "indonesia": "Indonesia",
+        "vietnam": "Vietnam",
+        "thailand": "Thailand",
+        "malaysia": "Malaysia",
+        "myanmar": "Myanmar",
+        "cambodia": "Cambodia",
+        "mozambique": "Mozambique"
     },
     "taiwan": {
         "headquarters": "Group Headquarters",
@@ -68,5 +79,17 @@
         "shandongJinan": "Shandong Jinan Plant",
         "guangdongQingxin": "Guangdong Qingxin Aseptic-filling Plant",
         "fujianZhangzhou": "Fujian Zhangzhou Aseptic-filling Plant"
+    },
+    "products": {
+        "lugCap": "Lug Cap",
+        "aluminumCap": "Aluminum Cap",
+        "plasticCap": "Plastic Cap",
+        "label": "Label",
+        "petBottle": "PET Bottle",
+        "preform": "Preform",
+        "asepticFilling": "Aseptic Filling",
+        "hotFilling": "Hot Filling",
+        "waterFilling": "Water Filling",
+        "coldHighPressureFilling": "Cold High Pressure Filling"
     }
 }

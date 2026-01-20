@@ -18,7 +18,7 @@
 }
 
 .map-img {
-  @apply w-[1531px] h-[806px] fixed top-[98px] left-[76px];
+  @apply w-[1531px] h-[806px] fixed top-[98px] left-[76px] z-[2];
 }
 
 .right-menu {
@@ -75,7 +75,7 @@
 }
 
 .filter-right-menu .menu-inside {
-  @apply bg-[#D8E6F2] flex flex-col gap-[16px] w-[664px] h-[440px];
+  @apply bg-[#D8E6F2] flex flex-col gap-[16px] w-[664px] min-h-[440px];
   padding: 16px 24px;
   border-radius: 32px 0 0 32px;
 }

@@ -15,6 +15,10 @@
         "global": "全球據點",
         "clean": "清除據點篩選"
     },
+    "filter": {
+        "productsAndServices": "產品及服務",
+        "clearProductFilter": "清除產品篩選"
+    },
     "factory": {
         "establishmentDate": "設立日期：",
         "landArea": "佔地面積",
@@ -44,7 +48,14 @@
     "regions": {
         "japan": "日本",
         "taiwan": "台灣",
-        "china": "中國大陸"
+        "china": "中國大陸",
+        "indonesia": "印尼",
+        "vietnam": "越南",
+        "thailand": "泰國",
+        "malaysia": "馬來西亞",
+        "myanmar": "緬甸",
+        "cambodia": "柬埔寨",
+        "mozambique": "莫三比克"
     },
     "taiwan": {
         "headquarters": "集團總部",
@@ -68,5 +79,17 @@
         "shandongJinan": "山東濟南廠",
         "guangdongQingxin": "廣東清新無菌飲料廠",
         "fujianZhangzhou": "福建漳州無菌飲料廠"
+    },
+    "products": {
+        "lugCap": "爪蓋",
+        "aluminumCap": "鋁蓋",
+        "plasticCap": "塑蓋",
+        "label": "標籤",
+        "petBottle": "PET寶特瓶",
+        "preform": "瓶胚",
+        "asepticFilling": "無菌充填",
+        "hotFilling": "熱充填",
+        "waterFilling": "水充填",
+        "coldHighPressureFilling": "冷高壓充填"
     }
 }

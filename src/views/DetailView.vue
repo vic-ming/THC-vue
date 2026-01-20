@@ -46,9 +46,9 @@
 
 
       <!-- 關於本廠 -->
-      <div v-if="selectedMenu === 'introduction'" class="detail-content">
+      <div class="detail-content">
         <div class="detail-info">
-          <div class="date">設立日期： <span>2023/12</span></div>
+          <div class="date">{{ t('factory.establishmentDate') }} <span>2023/12</span></div>
           <div class="country">印尼</div>
           <div class="address">41361 Industrial VI Lot PD Road 13-15, Margamulya Village/Sub-district, West Telukjambe District, Karawang Regency, West Java Province, Indonesia</div>
         </div>
@@ -108,31 +108,37 @@
       </div>
 
       <!-- 訪廠影片 -->
-      <div v-if="selectedMenu === 'video'" class="common-content">
-        <div class="video-content">
-          <video-player
-            ref="videoPlayerRef"
-            class="video-player"
-            src="/example.mp4"
-            :options="playerOptions"
-            @mounted="onPlayerMounted"
-          />
+      <Transition name="popup-zoom">
+        <div v-if="selectedMenu === 'video'" class="common-content !z-[5]">
+          <div class="popup-mask" @click="selectedMenu = 'introduction'"></div>
+          <div class="video-content">
+            <video-player
+              ref="videoPlayerRef"
+              class="video-player"
+              src="/example.mp4"
+              :options="playerOptions"
+              @mounted="onPlayerMounted"
+            />
+          </div>
+          <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
         </div>
-        <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
-      </div>
+      </Transition>
       <!-- 360 影片 -->
-      <div v-if="selectedMenu === 'video360'" class="common-content">
-        <div class="video-content">
-          <video-player
-            ref="video360PlayerRef"
-            class="video-player"
-            src="/example.mp4"
-            :options="playerOptions"
-            @mounted="onPlayerMounted"
-          />
+      <Transition name="popup-zoom">
+        <div v-if="selectedMenu === 'video360'" class="common-content !z-[5]">
+          <div class="popup-mask" @click="selectedMenu = 'introduction'"></div>
+          <div class="video-content">
+            <video-player
+              ref="video360PlayerRef"
+              class="video-player"
+              src="/example.mp4"
+              :options="playerOptions"
+              @mounted="onPlayerMounted"
+            />
+          </div>
+          <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
         </div>
-        <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
-      </div>
+      </Transition>
     </div>
   </Layout>
 </template>
@@ -179,6 +185,8 @@ const onPlayerMounted = (player) => {
 // 語系切換函數
 const toggleLanguage = () => {
   locale.value = locale.value === 'zh-TW' ? 'en' : 'zh-TW'
+  // 保存到 localStorage
+  localStorage.setItem('app-locale', locale.value)
   console.log('Language switched to:', locale.value)
 }
 
@@ -305,6 +313,7 @@ const rightMenu = computed(() => [
 }
 .right-menu{
   bottom: 175px; 
+  z-index: 6;
 }
 .menu-inside{
   padding: 19px 0 27px 20px;
@@ -403,9 +412,16 @@ const rightMenu = computed(() => [
 }
 
 .common-content{
-  @apply fixed z-[2] top-[212px] left-[142px] flex items-center justify-between gap-[16px] w-[1488px] h-[804px];
+  @apply fixed inset-0 z-[2] flex items-center justify-center gap-[16px];
+  padding: 152px 218px 84px 142px;
+
+  .popup-mask {
+    @apply fixed inset-0 z-[1];
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
   .video-content{
-    @apply relative z-[2] h-full w-[1577px] border-[8px] border-[#FFC936] rounded-[32px] flex items-center justify-center;
+    @apply relative z-[2] h-full w-[1488px] border-[8px] border-[#FFC936] rounded-[32px] flex items-center justify-center;
     box-shadow: 2px 0px 8px 0px #00000066;
     background-color: #fff;
   }
@@ -418,6 +434,34 @@ const rightMenu = computed(() => [
       border-radius: 24px;
     }
   }
+
+  .close-icon {
+    @apply relative z-[2] cursor-pointer hover:opacity-70 transition-opacity;
+  }
   
+}
+
+.popup-zoom-enter-active,
+.popup-zoom-leave-active {
+  transition: opacity 1.2s ease-in-out;
+}
+
+.popup-zoom-enter-active :deep(.video-content),
+.popup-zoom-leave-active :deep(.video-content),
+.popup-zoom-enter-active :deep(.close-icon),
+.popup-zoom-leave-active :deep(.close-icon) {
+  transition: transform 1.2s ease-in-out;
+}
+
+.popup-zoom-enter-from,
+.popup-zoom-leave-to {
+  opacity: 0;
+}
+
+.popup-zoom-enter-from :deep(.video-content),
+.popup-zoom-leave-to :deep(.video-content),
+.popup-zoom-enter-from :deep(.close-icon),
+.popup-zoom-leave-to :deep(.close-icon) {
+  transform: scale(0.1);
 }
 </style>

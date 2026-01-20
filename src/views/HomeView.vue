@@ -2,10 +2,11 @@
   <Layout>
     <div class="container">
       <!-- 全球地圖 -->
-      <img v-if="selectedMenu !== 'coopLandmark'" class="map-img" src="/map/world.svg" alt="Home">
-
-      <!-- 全球地圖-銷售據點圖 -->
-      <img v-else class="map-img" src="/map/world-landmark.svg" alt="Logo">
+      <Transition name="map-fade" mode="out-in">
+        <img v-if="selectedMenu !== 'coopLandmark'" key="world" class="map-img" src="/map/world.svg" alt="Home">
+        <!-- 全球地圖-銷售據點圖 -->
+        <img v-else key="landmark" class="map-img" src="/map/world-landmark.svg" alt="Logo">
+      </Transition>
       
       <!-- 右側選單 -->
       <div class="right-menu">
@@ -34,11 +35,11 @@
         <div class="flex-1 flex items-center justify-center" :class="locale === 'en' ? 'text-[18px]' : 'text-[24px]'">{{ t('location.finder') }}</div>
       </div>
 
-      <Transition name="fade">
+      <Transition name="popup-zoom">
         <TotalPopup v-if="selectedMenu === 'stats'" @close="selectedMenu = null" />
       </Transition>
 
-      <Transition name="fade">
+      <Transition name="popup-zoom">
         <VideoListPopup v-if="selectedMenu === 'groupVideo'" @close="selectedMenu = null" />
       </Transition>
     </div>
@@ -61,6 +62,8 @@ const selectedMenu = ref(null)
 // 語系切換函數
 const toggleLanguage = () => {
   locale.value = locale.value === 'zh-TW' ? 'en' : 'zh-TW'
+  // 保存到 localStorage
+  localStorage.setItem('app-locale', locale.value)
   console.log('Language switched to:', locale.value)
 }
 
@@ -110,5 +113,37 @@ const rightMenu = computed(() => [
 ])
 </script>
 <style scoped>
+.popup-zoom-enter-active,
+.popup-zoom-leave-active {
+  transition: opacity 1.2s ease-in-out;
+}
 
+.popup-zoom-enter-active :deep(.popup-content),
+.popup-zoom-leave-active :deep(.popup-content),
+.popup-zoom-enter-active :deep(.close-icon),
+.popup-zoom-leave-active :deep(.close-icon) {
+  transition: transform 1.2s ease-in-out;
+}
+
+.popup-zoom-enter-from,
+.popup-zoom-leave-to {
+  opacity: 0;
+}
+
+.popup-zoom-enter-from :deep(.popup-content),
+.popup-zoom-leave-to :deep(.popup-content),
+.popup-zoom-enter-from :deep(.close-icon),
+.popup-zoom-leave-to :deep(.close-icon) {
+  transform: scale(0.1);
+}
+
+.map-fade-enter-active,
+.map-fade-leave-active {
+  transition: opacity 0.7s ease-in-out;
+}
+
+.map-fade-enter-from,
+.map-fade-leave-to {
+  opacity: 0;
+}
 </style>

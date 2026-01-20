@@ -1,0 +1,2032 @@
+{
+  "BG": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9411764740943909,
+        0.9725490212440491,
+        1
+      ],
+      "alpha": 1,
+      "hex": "#F0F8FF"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:591:2216",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "Primary": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.16862745583057404,
+        0.45490196347236633,
+        0.7764706015586853
+      ],
+      "alpha": 1,
+      "hex": "#2B74C6"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:592:2229",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "Secondary": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.7764706015586853,
+        0.8784313797950745,
+        0.9450980424880981
+      ],
+      "alpha": 1,
+      "hex": "#C6E0F1"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:592:2230",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "Third": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        1,
+        0.7882353067398071,
+        0.21176470816135406
+      ],
+      "alpha": 1,
+      "hex": "#FFC936"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:592:2231",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "White": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        1,
+        1,
+        1
+      ],
+      "alpha": 1,
+      "hex": "#FFFFFF"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:754:116",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "Black": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0,
+        0,
+        0
+      ],
+      "alpha": 1,
+      "hex": "#000000"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:795:242",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ]
+    }
+  },
+  "Text 1": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9960784316062927,
+        0.9843137264251709,
+        0.9764705896377563
+      ],
+      "alpha": 1,
+      "hex": "#FEFBF9"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:594:1612",
+      "com.figma.scopes": [
+        "TEXT_FILL"
+      ]
+    }
+  },
+  "Text 2": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.5686274766921997,
+        0.5960784554481506,
+        0.6039215922355652
+      ],
+      "alpha": 1,
+      "hex": "#91989A"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:594:1614",
+      "com.figma.scopes": [
+        "TEXT_FILL"
+      ]
+    }
+  },
+  "Line": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9176470637321472,
+        0.9176470637321472,
+        0.9176470637321472
+      ],
+      "alpha": 1,
+      "hex": "#EAEAEA"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:746:1388",
+      "com.figma.scopes": [
+        "STROKE"
+      ]
+    }
+  },
+  "UI Text": {
+    "Location Finder": {
+      "$type": "string",
+      "$value": "據點查詢",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:746:1331",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Annual production": {
+      "$type": "string",
+      "$value": "年產值",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:738",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Establishment Date": {
+      "$type": "string",
+      "$value": "設立日期：",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:741",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Land Area": {
+      "$type": "string",
+      "$value": "佔地面積",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:742",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Factory Area": {
+      "$type": "string",
+      "$value": "廠房面積",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:743",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "人": {
+      "$type": "string",
+      "$value": "人",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:1459:10542",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Number of Employees": {
+      "$type": "string",
+      "$value": "員工人數",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:767",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "Billion": {
+      "$type": "string",
+      "$value": "億",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:779:802",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "in house": {
+      "$type": "string",
+      "$value": "(In-house廠)",
+      "$extensions": {
+        "com.figma.type": "string",
+        "com.figma.variableId": "VariableID:1003:2655",
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      }
+    },
+    "menu-title": {
+      "Home": {
+        "$type": "string",
+        "$value": "首頁",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:746:1327",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Language": {
+        "$type": "string",
+        "$value": "English",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:746:1330",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Coop Landmark": {
+        "$type": "string",
+        "$value": "銷售據點",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:746:1326",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Group Video": {
+        "$type": "string",
+        "$value": "集團影片",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:746:1316",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Introduction": {
+        "$type": "string",
+        "$value": "關於本廠",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:402",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Video": {
+        "$type": "string",
+        "$value": "訪廠影片",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:403",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "360Video": {
+        "$type": "string",
+        "$value": "360度影片",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:404",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Return": {
+        "$type": "string",
+        "$value": "回上一層",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1036:1999",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Return to Finder": {
+        "$type": "string",
+        "$value": "返回篩選",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:802:5318",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "List Total": {
+      "51": {
+        "$type": "string",
+        "$value": "51",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7113",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Total": {
+        "$type": "string",
+        "$value": "集團總產能",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:746:1314",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "全球員工數": {
+        "$type": "string",
+        "$value": "全球員工數",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1278:9334",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "全球生產基地": {
+        "$type": "string",
+        "$value": "全球生產基地",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1278:9335",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "2024營收": {
+        "$type": "string",
+        "$value": "2024營收",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:6489",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "每年可生產": {
+        "$type": "string",
+        "$value": "每年可生產",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1278:9337",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "5,065": {
+        "$type": "string",
+        "$value": "5,065",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7110",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "NTD 284 億": {
+        "$type": "string",
+        "$value": "NTD 284億",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1278:9336",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "539 億個塑蓋": {
+        "$type": "string",
+        "$value": "539 億個塑蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7116",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "231 億支瓶胚": {
+        "$type": "string",
+        "$value": "231 億支瓶胚",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7119",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "16 億個爪蓋": {
+        "$type": "string",
+        "$value": "16 億個爪蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7122",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "43 億個鋁蓋": {
+        "$type": "string",
+        "$value": "43 億個鋁蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7125",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "116 億支瓶子": {
+        "$type": "string",
+        "$value": "116 億支瓶子",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7129",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "48 億瓶飲料充填": {
+        "$type": "string",
+        "$value": "48 億瓶飲料充填",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7132",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "113 億片標籤": {
+        "$type": "string",
+        "$value": "113 億片標籤",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1286:7136",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "Global": {
+      "Global": {
+        "$type": "string",
+        "$value": "全球據點",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:795:698",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Clean": {
+        "$type": "string",
+        "$value": "清除據點篩選",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:795:701",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Japan": {
+        "$type": "string",
+        "$value": "日本",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:969:1151",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "台灣": {
+        "台灣": {
+          "$type": "string",
+          "$value": "台灣",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:790:136",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "集團總部": {
+          "$type": "string",
+          "$value": "集團總部",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4854",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "(總公司 台中一廠)": {
+          "$type": "string",
+          "$value": " (總公司 / 台中一廠)",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4883",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "台中二廠": {
+          "$type": "string",
+          "$value": "台中二廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4855",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "台中無菌飲料一廠": {
+          "$type": "string",
+          "$value": "台中無菌飲料一廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4856",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "台中無菌飲料二廠": {
+          "$type": "string",
+          "$value": "台中無菌飲料二廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4857",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "台中無菌飲料三廠": {
+          "$type": "string",
+          "$value": "台中無菌飲料三廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4858",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "統一瑞芳廠(In-house廠)": {
+          "$type": "string",
+          "$value": "統一瑞芳廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4859",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "可口可樂桃園廠(In-house廠)": {
+          "$type": "string",
+          "$value": "可口可樂桃園廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4860",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "光泉嘉義廠(In-house廠)": {
+          "$type": "string",
+          "$value": "光泉嘉義廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4861",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "味丹沙鹿廠(In-house廠)": {
+          "$type": "string",
+          "$value": "味丹沙鹿廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4862",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "台中自貿廠園區": {
+          "$type": "string",
+          "$value": "台中自貿廠園區",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4863",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "中國": {
+        "中國": {
+          "$type": "string",
+          "$value": "中國大陸",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2336",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "蘇州宏全(大陸總部)": {
+          "$type": "string",
+          "$value": "蘇州宏全",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4868",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "(大陸總部)": {
+          "$type": "string",
+          "$value": "(大陸總部)",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4884",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "蘇州宏星廠": {
+          "$type": "string",
+          "$value": "蘇州宏星廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4869",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "湖南長沙廠": {
+          "$type": "string",
+          "$value": "湖南長沙廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4870",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "山西太原廠": {
+          "$type": "string",
+          "$value": "山西太原廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4871",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "山東濟南廠": {
+          "$type": "string",
+          "$value": "山東濟南廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4872",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "廣東清新無菌飲料廠": {
+          "$type": "string",
+          "$value": "廣東清新無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4873",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "福建漳州無菌飲料廠": {
+          "$type": "string",
+          "$value": "福建漳州無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4874",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "河南漯河廠": {
+          "$type": "string",
+          "$value": "河南漯河廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4875",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "安徽滁州宏全廠": {
+          "$type": "string",
+          "$value": "安徽滁州宏全廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4876",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "安徽滁州東鵬廠(In-house廠)": {
+          "$type": "string",
+          "$value": "安徽滁州東鵬廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4877",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "湖北仙桃無菌飲料廠(In-house廠)": {
+          "$type": "string",
+          "$value": "湖北仙桃無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4878",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "廣東佛山廠(In-house廠)": {
+          "$type": "string",
+          "$value": "廣東佛山廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4879",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "浙江衢州東鵬廠(In-house廠)": {
+          "$type": "string",
+          "$value": "浙江衢州東鵬廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4881",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "浙江常山廠(In-house廠)": {
+          "$type": "string",
+          "$value": "浙江常山廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1012:4882",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "印尼": {
+        "印尼": {
+          "$type": "string",
+          "$value": "印尼",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2327",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼總廠": {
+          "$type": "string",
+          "$value": "印尼總廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1057",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼泗水無菌飲料廠": {
+          "$type": "string",
+          "$value": "印尼泗水無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1109",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼KIIC無菌飲料廠": {
+          "$type": "string",
+          "$value": "印尼KIIC無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1058",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼Cibitung無菌飲料廠(In-house廠)": {
+          "$type": "string",
+          "$value": "印尼Cibitung無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1055",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼Futami廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "印尼Futami廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1056",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼美娜多廠": {
+          "$type": "string",
+          "$value": "印尼美娜多廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:796:1110",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "印尼Pandeglang廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "印尼Pandeglang廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1003:2681",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "越南": {
+        "越南": {
+          "$type": "string",
+          "$value": "越南",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2329",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "越南總廠": {
+          "$type": "string",
+          "$value": "越南總廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4855",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "越南VSIP 2A 廠": {
+          "$type": "string",
+          "$value": "越南VSIP 2A 廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4847",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "越南Masan北部廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "越南Masan北部廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4848",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "越南Masan南部廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "越南Masan南部廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4850",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "越南Masan西部廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "越南Masan西部廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4851",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "泰國": {
+        "泰國": {
+          "$type": "string",
+          "$value": "泰國",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2326",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "泰國總廠": {
+          "$type": "string",
+          "$value": "泰國總廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4822",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "泰國宏福廠": {
+          "$type": "string",
+          "$value": "泰國宏福廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4825",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "泰國宏信無菌飲料廠": {
+          "$type": "string",
+          "$value": "泰國宏信無菌飲料廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4828",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "泰國佛統廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "泰國佛統廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4831",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "泰國Foodstar廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "泰國Foodstar廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4834",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "馬來西亞": {
+        "馬來西亞": {
+          "$type": "string",
+          "$value": "馬來西亞",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2328",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "馬來西亞總廠": {
+          "$type": "string",
+          "$value": "馬來西亞總廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4856",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "馬來西亞Cocoaland廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "馬來西亞Cocoaland廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4857",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "緬甸": {
+        "緬甸": {
+          "$type": "string",
+          "$value": "緬甸",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2330",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "緬甸總廠": {
+          "$type": "string",
+          "$value": "緬甸總廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4858",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "緬甸宏佳廠": {
+          "$type": "string",
+          "$value": "緬甸宏佳廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4861",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "緬甸KH廠 (In-house廠)": {
+          "$type": "string",
+          "$value": "緬甸KH廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4862",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "緬甸聯通廠": {
+          "$type": "string",
+          "$value": "緬甸聯通廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4863",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "柬埔寨": {
+        "柬埔寨": {
+          "$type": "string",
+          "$value": "柬埔寨",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2334",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "柬埔寨宏全廠": {
+          "$type": "string",
+          "$value": "柬埔寨宏全廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4864",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      },
+      "莫三比克": {
+        "莫三比克": {
+          "$type": "string",
+          "$value": "莫三比克",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:794:2335",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "莫三比克宏正廠": {
+          "$type": "string",
+          "$value": "莫三比克宏正廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1186:4865",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        },
+        "莫三比克Shimada廠": {
+          "$type": "string",
+          "$value": "莫三比克Shimada廠",
+          "$extensions": {
+            "com.figma.type": "string",
+            "com.figma.variableId": "VariableID:1416:20992",
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          }
+        }
+      }
+    },
+    "Products": {
+      "Products": {
+        "$type": "string",
+        "$value": "產品及服務",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:792",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Clean": {
+        "$type": "string",
+        "$value": "清除產品篩選",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:795:706",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "爪蓋": {
+        "$type": "string",
+        "$value": "爪蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:798",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "鋁蓋": {
+        "$type": "string",
+        "$value": "鋁蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:795:281",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "塑蓋": {
+        "$type": "string",
+        "$value": "塑蓋",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:795:700",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "PET寶特瓶": {
+        "$type": "string",
+        "$value": "PET寶特瓶",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:795",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "瓶胚": {
+        "$type": "string",
+        "$value": "瓶胚",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:794",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "標籤": {
+        "$type": "string",
+        "$value": "標籤",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:800",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "無菌充填": {
+        "$type": "string",
+        "$value": "無菌充填",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:799",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "熱充填": {
+        "$type": "string",
+        "$value": "熱充填",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1040:4896",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "水充填": {
+        "$type": "string",
+        "$value": "水充填",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1040:4902",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "冷高壓充填": {
+        "$type": "string",
+        "$value": "冷高壓充填",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1040:4899",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "Handle": {
+        "$type": "string",
+        "$value": "把手",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:779:797",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "飲料代工": {
+        "$type": "string",
+        "$value": "飲料代工",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1233:9207",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    },
+    "Country": {
+      "蘇利南 Suriname": {
+        "$type": "string",
+        "$value": "蘇利南",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1159:10125",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "厄瓜多\tEcuador": {
+        "$type": "string",
+        "$value": "厄瓜多",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4169",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "蓋亞那\tGuyana": {
+        "$type": "string",
+        "$value": "蓋亞那",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4172",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "巴拿馬\tPanama": {
+        "$type": "string",
+        "$value": "巴拿馬",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4175",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "印度\tIndia": {
+        "$type": "string",
+        "$value": "印度",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4178",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "聖露西亞\tSaint Lucia": {
+        "$type": "string",
+        "$value": "聖露西亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4184",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "迦納\tGhana": {
+        "$type": "string",
+        "$value": "迦納",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4187",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "捷克共和國\tCzech Republic": {
+        "$type": "string",
+        "$value": "捷克共和國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4190",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "中國大陸\tChina Mainland": {
+        "$type": "string",
+        "$value": "中國大陸",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4193",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "香港\tHong Kong": {
+        "$type": "string",
+        "$value": "香港",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4196",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "越南\tVietnam": {
+        "$type": "string",
+        "$value": "越南",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4199",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "泰國\tThailand": {
+        "$type": "string",
+        "$value": "泰國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4202",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "印尼\tIndonesia": {
+        "$type": "string",
+        "$value": "印尼",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4205",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "馬來西亞\tMalaysia": {
+        "$type": "string",
+        "$value": "馬來西亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4208",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "新加坡\tSingapore": {
+        "$type": "string",
+        "$value": "新加坡",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4211",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "柬埔寨\tCambodia": {
+        "$type": "string",
+        "$value": "柬埔寨",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4214",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "緬甸\tMyanmar": {
+        "$type": "string",
+        "$value": "緬甸",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4217",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "羅馬尼亞\tRomania": {
+        "$type": "string",
+        "$value": "羅馬尼亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4220",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "蒙古\tMongolia": {
+        "$type": "string",
+        "$value": "蒙古",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4223",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "美國\tUnited States": {
+        "$type": "string",
+        "$value": "美國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4226",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "加拿大\tCanada": {
+        "$type": "string",
+        "$value": "加拿大",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4229",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "海地\tHaiti": {
+        "$type": "string",
+        "$value": "海地",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4232",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "千里達\tTrinidad and Tobago": {
+        "$type": "string",
+        "$value": "千里達",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4235",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "貝里斯\tBelize": {
+        "$type": "string",
+        "$value": "貝里斯",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4238",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "墨西哥\tMexico": {
+        "$type": "string",
+        "$value": "墨西哥",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4241",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "秘魯\tPeru": {
+        "$type": "string",
+        "$value": "秘魯",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4244",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "波多黎各\tPuerto Rico": {
+        "$type": "string",
+        "$value": "波多黎各",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4247",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "多明尼加共和國\tDominican Republic": {
+        "$type": "string",
+        "$value": "多明尼加共和國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4250",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "智利\tChile": {
+        "$type": "string",
+        "$value": "智利\t",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4253",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "瓜地馬拉\tGuatemala": {
+        "$type": "string",
+        "$value": "瓜地馬拉",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4256",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "牙買加\tJamaica": {
+        "$type": "string",
+        "$value": "牙買加",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4259",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "夏威夷\tHawaii": {
+        "$type": "string",
+        "$value": "夏威夷",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4262",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "塞班島\tSaipan": {
+        "$type": "string",
+        "$value": "塞班島",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4265",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "關島\tGuam": {
+        "$type": "string",
+        "$value": "關島",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4268",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "馬爾地夫\tMaldives": {
+        "$type": "string",
+        "$value": "馬爾地夫",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4271",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "日本\tJapan": {
+        "$type": "string",
+        "$value": "日本",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4274",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "韓國\tSouth Korea": {
+        "$type": "string",
+        "$value": "韓國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4277",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "紐西蘭\tNew Zealand": {
+        "$type": "string",
+        "$value": "紐西蘭",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4280",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "澳洲\tAustralia": {
+        "$type": "string",
+        "$value": "澳洲",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4283",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "萬那杜\tVanuatu": {
+        "$type": "string",
+        "$value": "萬那杜",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4286",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "新喀里多尼亞\tNew Caledonia": {
+        "$type": "string",
+        "$value": "新喀里多尼亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4289",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "斐濟\tFiji": {
+        "$type": "string",
+        "$value": "斐濟",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4292",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "帛琉\tPalau": {
+        "$type": "string",
+        "$value": "帛琉",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4295",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "菲律賓\tPhilippines": {
+        "$type": "string",
+        "$value": "菲律賓",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4298",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "巴基斯坦\tPakistan": {
+        "$type": "string",
+        "$value": "巴基斯坦",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4301",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "莫三比克\tMozambique": {
+        "$type": "string",
+        "$value": "莫三比克",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4304",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "奈及利亞\tNigeria": {
+        "$type": "string",
+        "$value": "奈及利亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4307",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "伊索比亞\tEthiopia": {
+        "$type": "string",
+        "$value": "伊索比亞",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4310",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "剛果共和國\tRepublic of the Congo": {
+        "$type": "string",
+        "$value": "剛果共和國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4313",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "馬達加斯加\tMadagascar": {
+        "$type": "string",
+        "$value": "馬達加斯加",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4316",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "埃及\tEgypt": {
+        "$type": "string",
+        "$value": "埃及",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4319",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "英國\tUnited Kingdom": {
+        "$type": "string",
+        "$value": "英國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4322",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "阿曼\tOman": {
+        "$type": "string",
+        "$value": "阿曼",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4325",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "斯里蘭卡\tSri Lanka": {
+        "$type": "string",
+        "$value": "斯里蘭卡",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4328",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      },
+      "阿拉伯聯合大公國 United Arab Emirates": {
+        "$type": "string",
+        "$value": "阿拉伯聯合大公國",
+        "$extensions": {
+          "com.figma.type": "string",
+          "com.figma.variableId": "VariableID:1160:4331",
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "中文"
+  }
+}
