@@ -1,5 +1,5 @@
 // API 基礎配置
-const API_BASE_URL = 'http://honchuan.vjinc.biz/api/v1/frontend'
+const API_BASE_URL = 'https://honchuan.vjinc.biz/api/v1/frontend'
 
 /**
  * 獲取所有數據（包含 home, product_services, regions）
