@@ -1,6 +1,7 @@
 <template>
   <Layout>
-    <div class="container">
+    <Transition name="page-fade" appear>
+      <div class="container relative z-[2]">
       <!-- 背景曲線 -->
       <img class="top-bg" src="/detail-top-bg.svg" alt="bg"> 
       
@@ -8,7 +9,9 @@
       <div class="top-img-wrapper">
         <div class="top-img-container">
           <img :src="topImage" alt="detail-top" class="top-img opacity-40" />
-          <div class="top-title">印尼KIIC無菌飲料廠</div>
+          <div class="top-title">
+            {{ currentFactory ? (locale === 'zh-TW' ? currentFactory.name.zh : currentFactory.name.en) : '工廠詳情' }}
+          </div>
         </div>
       </div>
 
@@ -20,8 +23,11 @@
               v-for="item in detailMenuItems"
               :key="item.id"
               class="menu-item"
-              :class="selectedMenu === item.id ? 'menu-item-selected' : ''"
-              @click="handleMenuSelect(item.id)"
+              :class="{
+                'menu-item-selected': selectedMenu === item.id,
+                'disabled': item.disabled
+              }"
+              @click="handleMenuSelect(item)"
             >
               <img class="w-[32px] h-[32px] absolute right-[-12px] top-[-12px]" :src="item.icon" :alt="item.id">
               <span :class="locale === 'en' ? 'text-[18px]' : 'text-[20px]'">{{ item.name }}</span>
@@ -49,8 +55,8 @@
       <div class="detail-content">
         <div class="detail-info">
           <div class="date">{{ t('factory.establishmentDate') }} <span>2023/12</span></div>
-          <div class="country">印尼</div>
-          <div class="address">41361 Industrial VI Lot PD Road 13-15, Margamulya Village/Sub-district, West Telukjambe District, Karawang Regency, West Java Province, Indonesia</div>
+          <div class="country">{{ currentRegion ? (locale === 'zh-TW' ? currentRegion.name.zh : currentRegion.name.en) : '' }}</div>
+          <div class="address">{{ currentFactory ? (locale === 'zh-TW' ? currentFactory.address.zh : currentFactory.address.en) : 'address'}}</div>
         </div>
         
         <div class="detail-swiper">
@@ -103,7 +109,7 @@
          
         </div>
         <div class="detail-chart">
-          <img src="/chart-info-example.svg" alt="chart">
+          <img :src="factoryLogo" alt="chart">
         </div>
       </div>
 
@@ -115,7 +121,7 @@
             <video-player
               ref="videoPlayerRef"
               class="video-player"
-              src="/example.mp4"
+              :src="visitVideoSrc"
               :options="playerOptions"
               @mounted="onPlayerMounted"
             />
@@ -131,7 +137,7 @@
             <video-player
               ref="video360PlayerRef"
               class="video-player"
-              src="/example.mp4"
+              :src="video360Src"
               :options="playerOptions"
               @mounted="onPlayerMounted"
             />
@@ -139,14 +145,16 @@
           <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
         </div>
       </Transition>
-    </div>
+      </div>
+    </Transition>
   </Layout>
 </template>
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import Layout from '../components/layout/layout.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, ref, reactive } from 'vue'
+import { useAppData } from '../composables/useAppData.js'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -156,7 +164,57 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
 const router = useRouter()
+const route = useRoute()
 const { t, locale } = useI18n()
+
+// 使用全局共享的應用數據
+const { regions } = useAppData()
+
+// 獲取從 FilterView 傳來的參數
+const regionFromRoute = ref(route.query.region || '')
+const factoryIdFromRoute = ref(route.query.factoryId || '')
+
+// 獲取當前區域數據
+const currentRegion = computed(() => {
+  if (!regionFromRoute.value || !regions.value) return null
+  
+  return regions.value.find(region => {
+    const regionValue = (region.name.en || '').toLowerCase().replace(/\s+/g, '-')
+    return regionValue === regionFromRoute.value
+  })
+})
+
+// 獲取當前工廠數據
+const currentFactory = computed(() => {
+  if (!factoryIdFromRoute.value || !regions.value) {
+    console.log('No factoryId or regions data')
+    return null
+  }
+  
+  console.log('Looking for factory with ID:', factoryIdFromRoute.value, 'Type:', typeof factoryIdFromRoute.value)
+  
+  // 遍歷所有區域找到對應的工廠
+  for (const region of regions.value) {
+    if (region.factories && Array.isArray(region.factories)) {
+      const factory = region.factories.find(f => {
+        // 使用寬鬆比較，支持數字和字符串
+        return f.id == factoryIdFromRoute.value || String(f.id) === String(factoryIdFromRoute.value)
+      })
+      if (factory) {
+        console.log('Found factory:', factory.name, 'ID:', factory.id)
+        return factory
+      }
+    }
+  }
+  
+  console.warn('Factory not found for ID:', factoryIdFromRoute.value)
+  console.log('Available regions:', regions.value.map(r => ({
+    name: r.name,
+    factoryCount: r.factories?.length || 0,
+    factoryIds: r.factories?.map(f => f.id) || []
+  })))
+  return null
+})
 
 // 選中的選單項目
 const selectedMenu = ref('introduction')
@@ -190,21 +248,64 @@ const toggleLanguage = () => {
   console.log('Language switched to:', locale.value)
 }
 
-// 可置換的頂部圖片
-const topImage = ref('/top-img-example.jpg')
+// 根據語系獲取圖片列表
+const localizedImages = computed(() => {
+  if (!currentFactory.value?.images) return []
+  
+  // 根據當前 locale 選擇陣列
+  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
+  const imageList = currentFactory.value.images[langKey]
+  
+  return Array.isArray(imageList) ? imageList : []
+})
+
+// 可置換的頂部圖片（使用當前語系的單一圖片欄位）
+const topImage = computed(() => {
+  if (!currentFactory.value?.image) return '/top-img-example.jpg'
+  
+  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
+  return currentFactory.value.image[langKey] || '/top-img-example.jpg'
+})
 
 // Swiper modules
 const swiperModules = [Navigation, Pagination]
 const swiperRef = ref(null)
 const activeSlideIndex = ref(0)
 
-// Factory images for the carousel
-const factoryImages = ref([
-  '/top-img-example.jpg',
-  '/top-img-example.jpg',
-  '/top-img-example.jpg',
-  '/top-img-example.jpg',
-])
+// Factory images for the carousel (使用工廠數據中的本地化圖片)
+const factoryImages = computed(() => {
+  const images = localizedImages.value
+  if (images.length > 0) {
+    return images
+  }
+  // 如果沒有圖片，顯示預設占位圖
+  return [
+    '/top-img-example.jpg',
+    '/top-img-example.jpg',
+  ]
+})
+
+// 工廠 Logo 路徑
+const factoryLogo = computed(() => {
+  if (!currentFactory.value?.logo) return null
+  
+  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
+  return currentFactory.value.logo[langKey] || null
+})
+
+// 訪廠影片路徑
+const visitVideoSrc = computed(() => {
+  if (!currentFactory.value?.visit_video) return null
+  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
+  return currentFactory.value.visit_video[langKey] || null
+})
+
+// 360 影片路徑
+const video360Src = computed(() => {
+  if (!currentFactory.value?.video_360) return null
+  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
+  return currentFactory.value.video_360[langKey] || null
+})
 
 // Handle slide change
 const onSlideChange = (swiper) => {
@@ -227,29 +328,47 @@ const goToSlide = (index) => {
   }
 }
 
-// 詳情頁選單項目
-const detailMenuItems = [
+// 詳情頁選單項目 (改為 computed 以響應數據變化)
+const detailMenuItems = computed(() => [
   {
     id: 'introduction',
-    name: computed(() => t('menu.introduction')),
-    icon: '/icon/menu-info.svg'
+    name: t('menu.introduction'),
+    icon: '/icon/menu-info.svg',
+    disabled: false
   },
   {
     id: 'video',
-    name: computed(() => t('menu.video')),
-    icon: '/icon/menu-camera.svg'
+    name: t('menu.video'),
+    icon: '/icon/menu-camera.svg',
+    disabled: !visitVideoSrc.value
   },
   {
     id: 'video360',
-    name: computed(() => t('menu.video360')),
-    icon: '/icon/menu-video.svg'
+    name: t('menu.video360'),
+    icon: '/icon/menu-video.svg',
+    disabled: !video360Src.value
   }
-]
+])
 
 // 選單選擇處理函數
-const handleMenuSelect = (menuId) => {
-  selectedMenu.value = menuId
-  console.log('Menu selected:', menuId)
+const handleMenuSelect = (item) => {
+  if (item.disabled) return
+  selectedMenu.value = item.id
+  console.log('Menu selected:', item.id)
+}
+
+// 返回到該國家的地圖頁面
+const handleReturn = () => {
+  if (regionFromRoute.value) {
+    // 返回到該國家的地圖,並保持區域選擇
+    router.push({
+      path: '/filter',
+      query: { region: regionFromRoute.value }
+    })
+  } else {
+    // 如果沒有區域信息,返回到全球地圖
+    router.push('/filter')
+  }
 }
 
 // 使用 computed 讓選單項目響應語言變化
@@ -259,7 +378,7 @@ const rightMenu = computed(() => [
     name: t('menu.home'),
     icon: '/icon/menu-home.svg',
     selectable: false,
-    onClick: () => {router.push('/')}
+    onClick: () => {router.push('/filter')}
   },
   {
     id: 'language',
@@ -274,7 +393,7 @@ const rightMenu = computed(() => [
     name: t('menu.return'),
     icon: '/icon/back-icon.svg',
     selectable: true,
-    onClick: () => {router.push('/filter')}
+    onClick: handleReturn
   },
 
 ])
@@ -318,6 +437,13 @@ const rightMenu = computed(() => [
 .menu-inside{
   padding: 19px 0 27px 20px;
   align-items: center;
+}
+.menu-item.disabled {
+  color: #B3B3B3 !important;
+  background-color: #EAEAEA !important;
+  border-color: #FFFFFF !important;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .detail-info{
   @apply flex flex-col fixed top-[150px] left-[64px] w-[480px];
@@ -393,7 +519,7 @@ const rightMenu = computed(() => [
 
 /* Thumbnail Container */
 .thumbnail-container {
-  @apply h-[96px] flex gap-[16px] mt-[16px] justify-between items-center;
+  @apply h-[96px] flex gap-[16px] mt-[16px] justify-start items-center;
 }
 
 .thumbnail-item {
@@ -463,5 +589,14 @@ const rightMenu = computed(() => [
 .popup-zoom-enter-from :deep(.close-icon),
 .popup-zoom-leave-to :deep(.close-icon) {
   transform: scale(0.1);
+}
+
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.8s ease-in-out;
+}
+
+.page-fade-enter-from {
+  opacity: 0;
 }
 </style>

@@ -12,7 +12,6 @@
           <div class="video-title">{{ video.name }}</div>
           <div class="video-thumbnail">
             <!-- <img :src="video.thumbnail" :alt="video.name"> -->
-            <!-- 播放按鈕遮罩 -->
             <div class="video-overlay">
               <div class="play-button">
                 <svg class="w-[60px] h-[60px] text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -21,11 +20,10 @@
               </div>
             </div>
           </div>
-          
         </div>
       </div>
 
-      <!-- 滿版影片播放器（在 popup 內） -->
+      <!-- 滿版影片播放器 -->
       <Transition name="player-fade">
         <div v-if="currentVideo" class="fullscreen-player">
           <div class="player-mask" @click="closePlayer"></div>
@@ -41,15 +39,24 @@
         </div>
       </Transition>
     </div>
-    <img v-if="!currentVideo" class="close-icon cursor-pointer hover:opacity-70 transition-opacity" src="/icon/close-icon.svg" alt="Close" @click="close">
-    <button v-else class="player-close-btn" @click="closePlayer">
+
+    <!-- 關閉按鈕：確保在沒有播放影片時顯示 -->
+    <img 
+      v-show="!currentVideo" 
+      class="close-icon" 
+      src="/icon/close-icon.svg" 
+      alt="Close" 
+      @click.stop="close"
+    >
+    
+    <button v-if="currentVideo" class="player-close-btn" @click="closePlayer">
       {{ t('menu.return') }}
       <img class="w-[32px] h-[32px] absolute right-[-12px] top-[-12px]" src="/icon/back-icon.svg" alt="back">
     </button>
   </div>
 </template>
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import { useI18n } from 'vue-i18n'
@@ -57,7 +64,21 @@ import { useI18n } from 'vue-i18n'
 const { t, locale } = useI18n()
 const emit = defineEmits(['close'])
 
+// 接收從父組件傳來的影片列表
+const props = defineProps({
+  videos: {
+    type: Array,
+    default: () => []
+  }
+})
+
+// 使用 computed 來處理影片列表，如果沒有數據則顯示空數組
+const videoList = computed(() => {
+  return props.videos || []
+})
+
 const close = () => {
+  console.log('close')
   emit('close')
 }
 
@@ -97,39 +118,6 @@ const closePlayer = () => {
 const onPlayerMounted = (player) => {
   console.log('Player mounted:', player)
 }
-
-const videoList = [
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題1',
-    thumbnail: '/video-thumbnail-1.jpg'
-  },
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題2',
-    thumbnail: '/video-thumbnail-2.jpg'
-  },
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題3',
-    thumbnail: '/video-thumbnail-3.jpg'
-  },
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題4',
-    thumbnail: '/video-thumbnail-4.jpg'
-  },
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題5',
-    thumbnail: '/video-thumbnail-5.jpg'
-  },
-  {
-    videoUrl: '/example.mp4',
-    name: '影片標題6',
-    thumbnail: '/video-thumbnail-6.jpg'
-  }
-]
 </script>
 
 <style lang="scss" scoped>
@@ -185,7 +173,9 @@ const videoList = [
   }
 
   .close-icon {
-    @apply relative z-[2] cursor-pointer hover:opacity-70 transition-opacity;
+    @apply relative z-[2] w-[40px] h-[40px] cursor-pointer hover:opacity-70 active:scale-95 transition-all;
+    flex-shrink: 0;
+    pointer-events: auto;
   }
 
   .popup-mask {

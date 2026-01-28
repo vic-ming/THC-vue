@@ -9,7 +9,8 @@
       </Transition>
       
       <!-- 右側選單 -->
-      <div class="right-menu">
+      <Transition name="slide-in-right" appear>
+        <div class="right-menu">
         <div class="menu-inside">
           <div 
             v-for="(item, index) in rightMenu" 
@@ -27,7 +28,8 @@
             <span>{{ item.name }}</span>
           </div>
         </div>
-      </div>
+        </div>
+      </Transition>
 
       <!-- 據點查詢 -->
       <div class="search-button" @click="router.push('/filter')">
@@ -36,11 +38,19 @@
       </div>
 
       <Transition name="popup-zoom">
-        <TotalPopup v-if="selectedMenu === 'stats'" @close="selectedMenu = null" />
+        <TotalPopup
+          v-if="selectedMenu === 'stats'" 
+          :image="homeImage"
+          @close="selectedMenu = null" 
+        />
       </Transition>
 
       <Transition name="popup-zoom">
-        <VideoListPopup v-if="selectedMenu === 'groupVideo'" @close="selectedMenu = null" />
+        <VideoListPopup 
+          v-if="selectedMenu === 'groupVideo'" 
+          :videos="homeVideos"
+          @close="selectedMenu = null" 
+        />
       </Transition>
     </div>
   </Layout>
@@ -52,12 +62,38 @@ import TotalPopup from '../components/total-popup.vue'
 import VideoListPopup from '../components/video-list-popup.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, ref } from 'vue'
+import { useAppData } from '../composables/useAppData.js'
 
 const router = useRouter()
 const { t, locale } = useI18n()
 
+// 使用全局共享的應用數據
+const { homeData } = useAppData()
+
 // 選中的選單項目
 const selectedMenu = ref(null)
+
+// 從 homeData 獲取影片列表
+const homeVideos = computed(() => {
+  if (!homeData.value || !homeData.value.videos) {
+    return []
+  }
+  
+  return homeData.value.videos.map(video => ({
+    id: video.id,
+    name: locale.value === 'zh-TW' ? video.title.zh : video.title.en,
+    videoUrl: locale.value === 'zh-TW' ? video.video.zh.url : video.video.en.url,
+    fileName: locale.value === 'zh-TW' ? video.video.zh.name : video.video.en.name
+  }))
+})
+
+const homeImage = computed(() => {
+  if (!homeData.value || !homeData.value.images) {
+    return ''
+  }
+  
+  return locale.value === 'zh-TW' ? homeData.value.images[0].image.zh : homeData.value.images[0].image.en
+})
 
 // 語系切換函數
 const toggleLanguage = () => {
@@ -145,5 +181,14 @@ const rightMenu = computed(() => [
 .map-fade-enter-from,
 .map-fade-leave-to {
   opacity: 0;
+}
+
+.slide-in-right-enter-active {
+  transition: all 0.8s ease-out;
+}
+
+.slide-in-right-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
 }
 </style>

@@ -1,16 +1,8 @@
 <template>
   <div class="total-popup">
-    <div class="popup-mask"></div>
+    <div class="popup-mask" @click="close"></div>
     <div class="popup-content">
-      <div class="total-list">
-        <div v-for="item in totalItems" :key="item.name" class="total-item">
-            <div class="flex-1 flex items-end justify-center">
-                <img :src="item.icon" :alt="item.name">
-            </div>
-             <div class="total-item-name" :class="locale === 'en' ? '!text-[24px]' : 'text-[26px]'">{{ item.value }}</div>
-            <div class="total-item-value" :class="locale === 'en' ? '!text-[20px]' : 'text-[24px]'">{{ item.name }}</div>
-        </div>
-      </div>
+      <img :src="image" alt="">
     </div>
     <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="close">
   </div>
@@ -20,6 +12,12 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 const emit = defineEmits(['close'])
 const { t, locale } = useI18n()
+const props = defineProps({
+    image: {
+        type: String,
+        default: ''
+    }
+})
 
 const close = () => {
   emit('close')
@@ -49,20 +47,6 @@ const totalItems = computed(() => [
     background-image: url('/total-bg.svg');
     background-size: cover;
     background-position: center;
-  }
-
-  .total-list {
-    @apply grid grid-cols-5 gap-[32px];
-    .total-item {
-      @apply bg-[#C6E0F1] w-[240px] h-[240px] rounded-[48px] overflow-hidden flex flex-col;
-      box-shadow: 4px 4px 4px 0px #00000040;
-      .total-item-name{
-        @apply flex items-center justify-center h-[68px] text-[26px] text-[#2B74C6] font-[700];
-      }
-      .total-item-value {
-        @apply flex items-center justify-center bg-[#2B74C6] h-[60px] text-[24px] text-white font-[700];
-      }
-    }
   }
 
   .close-icon {

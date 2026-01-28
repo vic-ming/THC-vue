@@ -17,6 +17,10 @@
   @apply w-full h-full relative max-w-full;
 }
 
+.world-img {
+  @apply w-[1531px] h-[806px] fixed top-[98px] left-[76px] z-[2];
+}
+
 .map-img {
   @apply w-[1531px] h-[806px] fixed top-[98px] left-[76px] z-[2];
 }
@@ -95,14 +99,16 @@
     @apply flex flex-wrap gap-[12px];
 
     .filter-item {
-      @apply h-[43px] px-[10px] min-w-[90px] border-[2px] flex items-center justify-center relative bg-white border-[#EAEAEA] rounded-full text-[#000000] font-[500] cursor-pointer transition-all;
+      @apply h-[43px] px-[10px] min-w-[90px] flex items-center justify-center relative bg-white rounded-full text-[#000000] font-[500] cursor-pointer transition-all;
+      box-shadow: inset 0 0 0 2px #EAEAEA;
 
       &.disabled {
         @apply bg-[#EAEAEA] text-[#B3B3B3] cursor-not-allowed;
       }
 
       &.selected {
-        @apply bg-[#FFC936] font-[700] border-[#000];
+        @apply bg-[#FFC936] font-[500];
+        box-shadow: inset 0 0 0 2px #000;
       }
     }
 
@@ -113,10 +119,12 @@
     @apply grid grid-cols-3 gap-[8px];
 
     .region-item {
-      @apply h-[54px] px-[10px] border-[2px] flex items-center justify-between relative bg-white border-[#EAEAEA] rounded-[8px] text-[#000000] transition-all;
+      @apply h-[54px] px-[10px] flex items-center justify-between relative bg-white rounded-[8px] text-[#000000] transition-all;
+      box-shadow: inset 0 0 0 2px #EAEAEA;
 
       &.selected {
-        @apply bg-[#FFC936] font-[700] border-[#000];
+        @apply bg-[#FFC936] font-[700];
+        box-shadow: inset 0 0 0 2px #000;
       }
 
       &.disabled {
