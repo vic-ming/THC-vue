@@ -118,6 +118,20 @@ const REGION_MAPPINGS = {
   }
 }
 
+// 黃色圖標映射表 (SVG filter ID -> Yellow Icon Index)
+// 用於隱藏/顯示對應的黃色工廠圖標
+const ICON_MAPPINGS = {
+  'taiwan': {},
+  'china': {},
+  'indonesia': {},
+  'vietnam': {},
+  'thailand': {},
+  'malaysia': {},
+  'myanmar': {},
+  'cambodia': {},
+  'mozambique': {}
+}
+
 const initializeMap = () => {
   if (!svgObject.value) {
     console.error('SVG object not found')
@@ -133,6 +147,46 @@ const initializeMap = () => {
     }
 
     console.log('SVG document loaded successfully')
+    
+    // 收集所有圖標組（包含光暈、黃色圖標、白色圓圈）
+    // 這些圖標組使用 filter*_dd_* 標識（dd 表示 double drop shadow，用於光暈效果）
+    const allIconGroups = svgDoc.value.querySelectorAll('g[filter]')
+    const iconGroups = Array.from(allIconGroups).filter(group => {
+      const filterAttr = group.getAttribute('filter')
+      return filterAttr && filterAttr.includes('_dd_') // 光暈效果的圖標組
+    })
+    
+    console.log(`Found ${iconGroups.length} icon groups (with glow effects) in ${props.region}`)
+    
+    // 收集所有箭頭線條（從按鈕指向圖標的藍色箭頭）
+    // 這些箭頭是獨立的 path 元素，fill="#004EA2" (需要處理大小寫和 style 屬性)
+    const allPaths = svgDoc.value.querySelectorAll('path')
+    const arrowPaths = Array.from(allPaths).filter(path => {
+      // 1. 檢查顏色是否為藍色 (處理 fill 屬性, style 屬性, 大小寫)
+      const fillAttr = path.getAttribute('fill')
+      const styleAttr = path.getAttribute('style') || ''
+      
+      let isBlue = false
+      if (fillAttr && fillAttr.toUpperCase() === '#004EA2') isBlue = true
+      if (styleAttr.toUpperCase().includes('FILL:#004EA2') || styleAttr.toUpperCase().includes('FILL: #004EA2')) isBlue = true
+      
+      if (!isBlue) return false
+      
+      // 2. 排除按鈕內的矩形（按鈕在 filter group 內）
+      let parent = path.parentElement
+      while (parent && parent !== svgDoc.value.documentElement) {
+        if (parent.tagName === 'g' && parent.getAttribute('filter')) {
+          return false // 在 filter group 內，不是箭頭
+        }
+        parent = parent.parentElement
+      }
+      return true // 不在 filter group 內，是箭頭
+    })
+    
+    console.log(`Found ${arrowPaths.length} arrow paths in ${props.region}`)
+    
+    
+    
     
     // 找到所有帶有 filter 屬性的 <g> 元素
     const allGroups = svgDoc.value.querySelectorAll('g[filter]')
@@ -167,12 +221,119 @@ const initializeMap = () => {
     
     // 獲取當前區域的特定映射配置
     const regionConfig = REGION_MAPPINGS[props.region] || {}
+    const iconConfig = ICON_MAPPINGS[props.region] || {}
     
     // 為每個藍色矩形標記分配工廠
     blueRectGroups.forEach((element, originalIndex) => {
       const filterAttr = element.getAttribute('filter')
       const filterIdStr = filterAttr?.match(/filter(\d+)/)?.[0] // 獲取 url(#filter0_d...) 中的 filter0
       const filterId = filterAttr?.match(/filter(\d+)/)?.[1]    // 獲取編號
+      
+      // 自動尋找與此按鈕接觸的箭頭
+      let associatedArrow = null
+      
+      // 獲取按鈕的邊界框 (兼容 rect 和 path)
+      let box = null
+      const rectElement = element.querySelector('rect')
+      
+      if (rectElement) {
+        const x = parseFloat(rectElement.getAttribute('x'))
+        const y = parseFloat(rectElement.getAttribute('y'))
+        const width = parseFloat(rectElement.getAttribute('width'))
+        const height = parseFloat(rectElement.getAttribute('height'))
+        const buffer = 20
+        box = {
+          left: x - buffer,
+          right: x + width + buffer,
+          top: y - buffer,
+          bottom: y + height + buffer,
+          centerX: x + width / 2,
+          centerY: y + height / 2
+        }
+      } else {
+        // 如果沒有 rect，嘗試使用 getBBox 或解析路徑
+        try {
+          if (typeof element.getBBox === 'function') {
+             const bbox = element.getBBox()
+             const buffer = 20
+             box = {
+               left: bbox.x - buffer,
+               right: bbox.x + bbox.width + buffer,
+               top: bbox.y - buffer,
+               bottom: bbox.y + bbox.height + buffer,
+               centerX: bbox.x + bbox.width / 2,
+               centerY: bbox.y + bbox.height / 2
+             }
+          }
+        } catch (e) {
+          console.warn('getBBox failed', e)
+        }
+        
+        // 如果 getBBox 失敗，嘗試解析所有 path 的坐標並計算聯合邊界
+        if (!box) {
+           const paths = element.querySelectorAll('path')
+           if (paths.length > 0) {
+             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+             let found = false
+             
+             paths.forEach(path => {
+               const d = path.getAttribute('d')
+               // 解析所有數字對 [x, y, x, y...]
+               const coords = d ? d.match(/[+-]?(\d*\.\d+|\d+)/g) : null
+               if (coords) {
+                 for (let i = 0; i < coords.length; i += 2) {
+                   const x = parseFloat(coords[i])
+                   const y = parseFloat(coords[i+1])
+                   if (!isNaN(x) && !isNaN(y)) {
+                     if (x < minX) minX = x
+                     if (y < minY) minY = y
+                     if (x > maxX) maxX = x
+                     if (y > maxY) maxY = y
+                     found = true
+                   }
+                 }
+               }
+             })
+             
+             if (found) {
+               const buffer = 20
+               box = {
+                 left: minX - buffer,
+                 right: maxX + buffer,
+                 top: minY - buffer,
+                 bottom: maxY + buffer,
+                 centerX: (minX + maxX) / 2,
+                 centerY: (minY + maxY) / 2
+               }
+               // console.log(`Calculated Union BBox for non-rect button:`, box)
+             }
+           }
+        }
+      }
+
+      if (box) {
+        // 檢查哪個箭頭的路徑點在邊界框內
+        associatedArrow = arrowPaths.find(path => {
+          const d = path.getAttribute('d')
+          if (!d) return false
+          
+          const coords = d.match(/[+-]?(\d*\.\d+|\d+)/g) // 改進的正則，支持 .5 格式
+          
+          if (coords) {
+             for (let i = 0; i < coords.length; i += 2) {
+               const px = parseFloat(coords[i])
+               const py = parseFloat(coords[i+1])
+               
+               if (!isNaN(px) && !isNaN(py)) {
+                 if (px >= box.left && px <= box.right && py >= box.top && py <= box.bottom) {
+                   return true // 發現接觸點
+                 }
+               }
+             }
+          }
+          return false
+        })
+      }
       
       let factory = null
       
@@ -200,16 +361,251 @@ const initializeMap = () => {
           )
         }
         
+        // 自動尋找關聯的圖標組 (通過箭頭)
+        let iconGroup = null
+        
+        if (associatedArrow) {
+          // 如果有箭頭，尋找離箭頭路徑最近的圖標組
+          const d = associatedArrow.getAttribute('d')
+          const coords = d ? d.match(/-?\d+(\.\d+)?/g) : []
+          
+          if (coords && coords.length > 0) {
+            let minDistance = Infinity
+            let closestGroup = null
+            
+            // 遍歷所有圖標組
+            iconGroups.forEach(group => {
+              // 找到圖標組內的黃色圖標作為中心點參考
+              const yellowIcon = group.querySelector('path[fill="#FFC936"]')
+              if (yellowIcon) {
+                // 獲取黃色圖標路徑的第一個點作為近似位置 (因為沒有簡單的 getBBox 在這裡)
+                // 假設路徑以 M x y 開頭
+                const dIcon = yellowIcon.getAttribute('d')
+                const iconCoords = dIcon ? dIcon.match(/-?\d+(\.\d+)?/g) : null
+                
+                if (iconCoords && iconCoords.length >= 2) {
+                  const iconX = parseFloat(iconCoords[0])
+                  const iconY = parseFloat(iconCoords[1])
+                  
+                  // 計算箭頭上所有點到此圖標的距離，取最小值
+                  for (let i = 0; i < coords.length; i += 2) {
+                    const arrowX = parseFloat(coords[i])
+                    const arrowY = parseFloat(coords[i+1])
+                    
+                    if (!isNaN(arrowX) && !isNaN(arrowY)) {
+                      const dist = Math.sqrt(Math.pow(arrowX - iconX, 2) + Math.pow(arrowY - iconY, 2))
+                      if (dist < minDistance) {
+                        minDistance = dist
+                        closestGroup = group
+                      }
+                    }
+                  }
+                }
+              }
+            })
+            
+            // 如果最近距離在合理範圍內 (放寬至 100px)，則認為是關聯圖標
+            if (minDistance < 100 && closestGroup) {
+              iconGroup = closestGroup
+              console.log(`Auto-linked arrow to icon for filter${filterId} (dist: ${minDistance.toFixed(1)})`)
+            }
+          }
+        }
+        
+        // Fallback: 如果沒有箭頭，或者箭頭沒有成功關聯到圖標，嘗試直接尋找最近的圖標組
+        if (!iconGroup && box) {
+             const btnX = box.centerX
+             const btnY = box.centerY
+             
+             let minDistance = Infinity
+             let closestGroup = null
+             
+             iconGroups.forEach(group => {
+                const yellowIcon = group.querySelector('path[fill="#FFC936"]')
+                if (yellowIcon) {
+                  const dIcon = yellowIcon.getAttribute('d')
+                  const iconCoords = dIcon ? dIcon.match(/[+-]?(\d*\.\d+|\d+)/g) : null
+                  if (iconCoords && iconCoords.length >= 2) {
+                    const iconX = parseFloat(iconCoords[0])
+                    const iconY = parseFloat(iconCoords[1])
+                    const dist = Math.sqrt(Math.pow(btnX - iconX, 2) + Math.pow(btnY - iconY, 2))
+                    
+                    if (dist < minDistance) {
+                      minDistance = dist
+                      closestGroup = group
+                    }
+                  }
+                }
+             })
+             
+             // 距離閾值設為 300px (進一步放寬以適應某些工廠的布局)
+             // 確保即使沒有箭頭，只要在合理範圍內都能關聯
+             if (minDistance < 300 && closestGroup) {
+               iconGroup = closestGroup
+               console.log(`Auto-linked button directly to icon for filter${filterId} (dist: ${minDistance.toFixed(1)})`)
+             }
+        }
+
+        
+        // Fallback 2: 嘗試基於 Filter ID 匹配 (同名匹配)
+        // 例如：按鈕是 filter2_d... -> 尋找 filter2_dd... 的圖標
+        // 這能解決距離檢測失敗且沒有手動映射的情況 (如 China ID 20)
+        if (!iconGroup) {
+           const targetIconFilter = `filter${filterId}_dd`
+           iconGroup = iconGroups.find(g => {
+             const f = g.getAttribute('filter')
+             return f && f.includes(targetIconFilter)
+           })
+           if (iconGroup) {
+             console.log(`Auto-linked button to icon by Filter ID: filter${filterId}`)
+           }
+        }
+        
+        // Fallback 3: 針對特定已知問題的硬編碼修復
+        // China ID 20 (與 filter2_dd 關聯，但自動檢測失敗)
+        if (!iconGroup && props.region === 'china' && factory.id === 20) {
+           iconGroup = iconGroups.find(g => {
+             const f = g.getAttribute('filter')
+             return f && f.includes('filter2_dd')
+           })
+           if (iconGroup) console.log('Hardcoded fix applied for China ID 20')
+        }
+
+        // 如果自動檢測失敗，嘗試使用手動映射 (最後的後備方案)
+        if (!iconGroup) {
+            const iconIndex = iconConfig[`filter${filterId}`]
+            iconGroup = (iconIndex !== null && iconIndex !== undefined) ? iconGroups[iconIndex] : null
+        }
+        
+        // --- FORCE OVERRIDE FOR CHINA ID 20 ---
+        // 放在最後以覆蓋任何之前的錯誤匹配
+        if (props.region === 'china' && factory.id == 20) {
+             // 強制關聯圖標
+             const manualIcon = iconGroups.find(g => {
+               const f = g.getAttribute('filter')
+               return f && f.includes('filter2_dd')
+             })
+             if (manualIcon) {
+               iconGroup = manualIcon
+               console.log('FORCE OVERRIDE: Linked Icon filter2_dd for ID 20')
+             }
+             
+             // 強制關聯箭頭 (通過路徑特徵)
+             // d="M699.25 583..."
+             const manualArrow = arrowPaths.find(p => {
+               const d = p.getAttribute('d')
+               return d && d.startsWith('M699.25 583')
+             })
+             if (manualArrow) {
+               associatedArrow = manualArrow
+               console.log('FORCE OVERRIDE: Linked Arrow M699 for ID 20')
+             }
+        }
+
+        // --- FORCE OVERRIDE FOR INDONESIA ID 25 ---
+        if (props.region === 'indonesia' && factory.id == 25) {
+             // 強制關聯箭頭 (d="M517.75 583...")
+             const manualArrow = arrowPaths.find(p => {
+               const d = p.getAttribute('d')
+               return d && d.startsWith('M517.75 583')
+             })
+             if (manualArrow) {
+               associatedArrow = manualArrow
+               console.log('FORCE OVERRIDE: Linked Arrow M517 for ID 25')
+             }
+
+             // 強制關聯圖標 (尋找位於 arrow 終點 476, 508 附近的圖標)
+             // 這樣比猜測 filter ID 更安全
+             let bestIcon = null
+             let bestDist = Infinity
+             const targetX = 476
+             const targetY = 508
+             
+             iconGroups.forEach(g => {
+                const yellowIcon = g.querySelector('path[fill="#FFC936"]')
+                if (yellowIcon) {
+                   const d = yellowIcon.getAttribute('d')
+                   const coords = d ? d.match(/[+-]?(\d*\.\d+|\d+)/g) : null
+                   if (coords && coords.length >= 2) {
+                      const x = parseFloat(coords[0])
+                      const y = parseFloat(coords[1])
+                      const dist = Math.sqrt(Math.pow(x - targetX, 2) + Math.pow(y - targetY, 2))
+                      if (dist < bestDist) {
+                        bestDist = dist
+                        bestIcon = g
+                      }
+                   }
+                }
+             })
+             
+             if (bestIcon && bestDist < 100) {
+                iconGroup = bestIcon
+                console.log(`FORCE OVERRIDE: Linked Icon for ID 25 (dist: ${bestDist.toFixed(1)})`)
+             }
+        }
+
+        // --- FORCE OVERRIDE FOR VIETNAM ID 33 ---
+        if (props.region === 'vietnam' && factory.id == 33) {
+             const manualIcon = iconGroups.find(g => {
+                const yellowIcon = g.querySelector('path[fill="#FFC936"]')
+                if (yellowIcon) {
+                   const d = yellowIcon.getAttribute('d')
+                   return d && d.startsWith('M772.256 663.019')
+                }
+                return false
+             })
+             
+             if (manualIcon) {
+                iconGroup = manualIcon
+                console.log('FORCE OVERRIDE: Linked Icon for Vietnam ID 33')
+             }
+        }
+
+        // --- FORCE OVERRIDE FOR THAILAND ID 40 ---
+        if (props.region === 'thailand' && factory.id == 40) {
+             const manualIcon = iconGroups.find(g => {
+                const yellowIcon = g.querySelector('path[fill="#FFC936"]')
+                if (yellowIcon) {
+                   const d = yellowIcon.getAttribute('d')
+                   return d && d.startsWith('M719.256 348.019')
+                }
+                return false
+             })
+             
+             if (manualIcon) {
+                iconGroup = manualIcon
+                console.log('FORCE OVERRIDE: Linked Icon for Thailand ID 40')
+             }
+        }
+        
+        // 收集需要一起顯示/隱藏的元素
+        const elementsToToggle = [element] // 藍色按鈕
+        if (iconGroup) {
+          elementsToToggle.push(iconGroup) // 整個圖標組（包含所有子元素）
+        }
+        if (associatedArrow) {
+          elementsToToggle.push(associatedArrow) // 自動檢測到的箭頭線條
+        }
+        
         // 根據 shouldShow 來設置顯示/隱藏（帶淡入淡出效果）
         if (shouldShow) {
-          // 淡入效果
-          element.style.display = 'block'
-          element.style.transition = 'opacity 0.4s ease-in-out'
-          element.style.opacity = '0'
-          
-          // 使用 requestAnimationFrame 確保過渡效果生效
-          requestAnimationFrame(() => {
-            element.style.opacity = '1'
+          elementsToToggle.forEach(el => {
+            // 取消之前可能存在的隱藏定時器
+            if (el._hideTimeout) {
+              clearTimeout(el._hideTimeout)
+              el._hideTimeout = null
+            }
+            
+            // 淡入效果
+            // 對於 SVG 元素,使用空字符串恢復默認 display 值
+            el.style.display = ''
+            el.style.transition = 'opacity 0.4s ease-in-out'
+            el.style.opacity = '0'
+            
+            // 使用 requestAnimationFrame 確保過渡效果生效
+            requestAnimationFrame(() => {
+              el.style.opacity = '1'
+            })
           })
           
           element.style.cursor = 'pointer'
@@ -240,14 +636,23 @@ const initializeMap = () => {
             }
           })
         } else {
-          // 淡出效果
-          element.style.transition = 'opacity 0.4s ease-in-out'
-          element.style.opacity = '0'
-          
-          // 等待淡出動畫完成後再隱藏
-          setTimeout(() => {
-            element.style.display = 'none'
-          }, 400) // 與 transition 時間一致
+          elementsToToggle.forEach(el => {
+            // 取消之前可能存在的隱藏定時器
+            if (el._hideTimeout) {
+              clearTimeout(el._hideTimeout)
+              el._hideTimeout = null
+            }
+            
+            // 淡出效果
+            el.style.transition = 'opacity 0.4s ease-in-out'
+            el.style.opacity = '0'
+            
+            // 等待淡出動畫完成後再隱藏,並保存 timeout ID
+            el._hideTimeout = setTimeout(() => {
+              el.style.display = 'none'
+              el._hideTimeout = null
+            }, 400) // 與 transition 時間一致
+          })
         }
       }
     })
