@@ -27,6 +27,16 @@ export function useAppData() {
         return appData.value?.home || { videos: [], images: [] }
     })
 
+    // 介紹影片
+    const introVideo = computed(() => {
+        return appData.value?.intro_video || null
+    })
+
+    // 銷售據點
+    const salesLocations = computed(() => {
+        return appData.value?.sales_locations || []
+    })
+
     /**
      * 加載應用數據
      * 如果數據已經加載過，則不會重複加載
@@ -93,6 +103,8 @@ export function useAppData() {
         productServices,
         regions,
         homeData,
+        introVideo,
+        salesLocations,
 
         // 狀態
         isLoading,

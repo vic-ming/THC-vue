@@ -5,7 +5,7 @@
       <Transition name="map-fade" mode="out-in">
         <img v-if="selectedMenu !== 'coopLandmark'" key="world" class="map-img" src="/map/world.svg" alt="Home">
         <!-- 全球地圖-銷售據點圖 -->
-        <img v-else key="landmark" class="map-img" src="/map/world-landmark.svg" alt="Logo">
+        <img v-else key="landmark" class="map-img" :src="salesLocationImage" alt="Logo">
       </Transition>
       
       <!-- 右側選單 -->
@@ -68,7 +68,7 @@ const router = useRouter()
 const { t, locale } = useI18n()
 
 // 使用全局共享的應用數據
-const { homeData } = useAppData()
+const { homeData, salesLocations } = useAppData()
 
 // 選中的選單項目
 const selectedMenu = ref(null)
@@ -93,6 +93,16 @@ const homeImage = computed(() => {
   }
   
   return locale.value === 'zh-TW' ? homeData.value.images[0].image.zh : homeData.value.images[0].image.en
+})
+
+const salesLocationImage = computed(() => {
+  if (!salesLocations.value || salesLocations.value.length === 0) {
+    return '/map/world-landmark.svg' // Fallback to static image
+  }
+  // 假設 salesLocations 是一個數組，取第一個項目 (與 API 結構一致)
+  const location = salesLocations.value[0]
+  const img = locale.value === 'zh-TW' ? location.image.zh : location.image.en
+  return img || '/map/world-landmark.svg'
 })
 
 // 語系切換函數

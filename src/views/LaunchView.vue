@@ -32,13 +32,19 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
+import { useAppData } from '../composables/useAppData.js'
 
 const router = useRouter()
-const videoUrl = '/example.mp4'
+const { introVideo } = useAppData()
+
+const videoUrl = computed(() => {
+  return introVideo.value?.video_url || '/example.mp4'
+})
+
 const videoError = ref(false)
 const isMuted = ref(true)
 const videoPlayerRef = ref(null)
