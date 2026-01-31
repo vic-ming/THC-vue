@@ -17,6 +17,7 @@
           :map-src="currentMap"
           :region="selectedRegion"
           :factories="currentRegionFactories"
+          :selected-products="selectedProducts"
           @factory-click="handleFactoryClick"
           class="map-img"
         />
@@ -147,12 +148,13 @@ const handleRegionClick = (region) => {
 // 處理工廠點擊事件
 const handleFactoryClick = ({ factory, index }) => {
   console.log('Factory clicked:', factory.name, 'Index:', index)
-  // 跳轉到 DetailView 並傳遞工廠 ID
+  // 跳轉到 DetailView 並傳遞工廠 ID 和選中的產品篩選
   router.push({
     path: '/detail',
     query: { 
       region: selectedRegion.value,
-      factoryId: factory.id 
+      factoryId: factory.id,
+      products: selectedProducts.value.length > 0 ? selectedProducts.value.join(',') : undefined
     }
   })
 }

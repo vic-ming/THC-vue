@@ -25,6 +25,10 @@ const props = defineProps({
   factories: {
     type: Array,
     default: () => []
+  },
+  selectedProducts: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -45,37 +49,72 @@ const onMapLoad = () => {
 // 這裡可以手動設定每個地區的 SVG 元素與工廠 ID 的開發對應關係
 const REGION_MAPPINGS = {
   'taiwan': {
-  
+    'filter10': 7, // 可口可樂桃園廠 (In-house廠)
+    'filter11': 6, // 統一瑞芳廠(In-house廠)
+    'filter12': 1, // 集團總部 (總公司 / 台中一廠)
+    'filter13': 3, // 台中無菌飲料一廠
+    'filter14': 4, // 台中無菌飲料二廠
+    'filter15': 2, // 台中二廠
+    'filter16': 5, // 台中無菌飲料三廠
+    'filter17': 8, // 光泉嘉義廠 (In-house廠)
+    'filter18': 9, // 味丹沙鹿廠 (In-house廠)
+    'filter19': 10, // 台中自貿廠園區
   },
   'china': {
-    // 'filter0': ID,
+    'filter14': 23, // 浙江衢州東鵬廠 (In-house廠)
+    'filter15': 24, // 浙江常山廠 (In-house廠)
+    'filter16': 19, // 安徽滁州宏全廠
+    'filter17': 18, // 河南漯河廠
+    'filter18': 20, // 安徽滁州東鵬廠 (In-house廠)
+    'filter19': 11, // 蘇州宏全 (大陸總部)
+    'filter20': 12, // 蘇州宏星廠
+    'filter21': 13, // 湖南長沙廠
+    'filter22': 14, // 山西太原廠
+    'filter23': 15, // 山東濟南廠
+    'filter24': 16, // 廣東清新無菌飲料廠
+    'filter25': 17, // 福建漳州無菌飲料廠
+    'filter26': 22, // 廣東佛山廠 (In-house廠)
+    'filter27': 21, // 湖北仙桃無菌飲料廠 (In-house廠)
   },
   'indonesia': {
-    'filter0': 27,
-    'filter1': 31,
-    'filter2': 30,
-    'filter3': 28,
-    'filter4': 25,
-    'filter5': 26,
-    'filter6': 29,
+    'filter0': 27, // 印尼泗水無菌飲料廠
+    'filter1': 31, // 印尼Pandeglang廠(In-house廠)
+    'filter2': 30, // 印尼美娜多廠
+    'filter3': 28, // 印尼Cibitung無菌飲料廠(In-house廠)
+    'filter4': 25, // 印尼KIIC無菌飲料廠
+    'filter5': 26, // 印尼總廠
+    'filter6': 29, // 印尼Futami廠(In-house廠)
   },
   'vietnam': {
-    // 'filter0': ID,
+    'filter5': 32, // 越南總廠
+    'filter6': 33, // 越南VSIP 2A 廠
+    'filter7': 34, // 越南Masan北部廠
+    'filter8': 35, // 越南Masan南部廠(In-house廠)
+    'filter9': 36, // 越南Masan西部廠(In-house廠)
   },
   'thailand': {
-    // 'filter0': ID,
+    'filter4': 37, // 泰國總廠
+    'filter6': 39, // 泰國宏信無菌飲料廠
+    'filter7': 41, // 泰國 Foodstar 廠
+    'filter8': 38, // 泰國宏福廠
+    'filter9': 40, // 泰國佛統廠(In-house廠)
   },
   'malaysia': {
-    // 'filter0': ID,
+    'filter0': 43, // 馬來西亞Cocoaland廠(In-house廠)
+    'filter1': 42, // 馬來西亞總廠
   },
   'myanmar': {
-    // 'filter0': ID,
+    'filter0': 44, // 緬甸總廠
+    'filter5': 45, // 緬甸宏佳廠
+    'filter6': 46, // 緬甸
+    'filter7': 47, // 緬甸聯通廠
   },
   'cambodia': {
-    // 'filter0': ID,
+    'filter0': 48, // 柬埔寨宏全廠
   },
   'mozambique': {
-    // 'filter0': ID,
+    'filter2': 49, // 莫三比克宏正廠
+    'filter3': 50, // 莫三比克Shimada廠
   }
 }
 
@@ -150,33 +189,66 @@ const initializeMap = () => {
       }
       
       if (factory) {
-        element.style.cursor = 'pointer'
-        element.setAttribute('data-factory-id', factory.id)
-        element.setAttribute('data-factory-name', factory.name.zh || factory.name.en)
+        // 檢查是否應該顯示這個按鈕（根據產品篩選）
+        let shouldShow = true
         
-        // 添加點擊事件
-        element.addEventListener('click', (e) => {
-          e.stopPropagation()
-          console.log(`Click: filter${filterId}, Factory: ${factory.name.zh}, ID: ${factory.id}`)
-          handleFactoryClick(factory, originalIndex)
-        }, { replace: true }) // 防重複
+        if (props.selectedProducts.length > 0) {
+          // 如果有篩選條件，檢查工廠是否提供這些產品服務
+          const factoryServices = factory.product_services?.map(s => s.name.zh) || []
+          shouldShow = props.selectedProducts.some(product => 
+            factoryServices.includes(product)
+          )
+        }
         
-        // 添加懸停效果與調試信息
-        element.addEventListener('mouseenter', () => {
-          const rect = element.querySelector('rect')
-          if (rect) {
-            rect.style.fill = '#FFC936'
-            rect.style.transition = 'all 0.3s ease'
-          }
-          console.log(`Hover: filter${filterId} | Factory: ${factory.name.zh} (ID:${factory.id}) | Y: ${element.querySelector('rect')?.getAttribute('y')}`)
-        })
-        
-        element.addEventListener('mouseleave', () => {
-          const rect = element.querySelector('rect')
-          if (rect) {
-            rect.style.fill = '#004EA2'
-          }
-        })
+        // 根據 shouldShow 來設置顯示/隱藏（帶淡入淡出效果）
+        if (shouldShow) {
+          // 淡入效果
+          element.style.display = 'block'
+          element.style.transition = 'opacity 0.4s ease-in-out'
+          element.style.opacity = '0'
+          
+          // 使用 requestAnimationFrame 確保過渡效果生效
+          requestAnimationFrame(() => {
+            element.style.opacity = '1'
+          })
+          
+          element.style.cursor = 'pointer'
+          element.setAttribute('data-factory-id', factory.id)
+          element.setAttribute('data-factory-name', factory.name.zh || factory.name.en)
+          
+          // 添加點擊事件
+          element.addEventListener('click', (e) => {
+            e.stopPropagation()
+            console.log(`Click: filter${filterId}, Factory: ${factory.name.zh}, ID: ${factory.id}`)
+            handleFactoryClick(factory, originalIndex)
+          }, { replace: true }) // 防重複
+          
+          // 添加懸停效果與調試信息
+          element.addEventListener('mouseenter', () => {
+            const rect = element.querySelector('rect')
+            if (rect) {
+              rect.style.fill = '#FFC936'
+              rect.style.transition = 'all 0.3s ease'
+            }
+            console.log(`Hover: filter${filterId} | Factory: ${factory.name.zh} (ID:${factory.id}) | Y: ${element.querySelector('rect')?.getAttribute('y')}`)
+          })
+          
+          element.addEventListener('mouseleave', () => {
+            const rect = element.querySelector('rect')
+            if (rect) {
+              rect.style.fill = '#004EA2'
+            }
+          })
+        } else {
+          // 淡出效果
+          element.style.transition = 'opacity 0.4s ease-in-out'
+          element.style.opacity = '0'
+          
+          // 等待淡出動畫完成後再隱藏
+          setTimeout(() => {
+            element.style.display = 'none'
+          }, 400) // 與 transition 時間一致
+        }
       }
     })
     
@@ -207,6 +279,14 @@ onMounted(() => {
 // 當工廠數據變化時重新初始化
 watch(() => props.factories, () => {
   if (svgDoc.value) {
+    initializeMap()
+  }
+}, { deep: true })
+
+// 當產品篩選變化時重新初始化（即時更新）
+watch(() => props.selectedProducts, () => {
+  if (svgDoc.value) {
+    console.log('Product filter changed, re-initializing map with filters:', props.selectedProducts)
     initializeMap()
   }
 }, { deep: true })

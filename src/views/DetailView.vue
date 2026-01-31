@@ -59,7 +59,7 @@
           <div class="address">{{ currentFactory ? (locale === 'zh-TW' ? currentFactory.address.zh : currentFactory.address.en) : 'address'}}</div>
         </div>
         
-        <div class="detail-swiper">
+        <div v-if="factoryImages.length > 0" class="detail-swiper">
           <swiper
             ref="swiperRef"
             :modules="swiperModules"
@@ -108,8 +108,15 @@
 
          
         </div>
+        <div v-else class="detail-swiper">
+          <p>暫無圖片</p>
+        </div>
+
         <div class="detail-chart">
-          <img :src="factoryLogo" alt="chart">
+          <img v-if="factoryLogo" :src="factoryLogo" alt="chart">
+          <div v-else class="chart-placeholder">
+            <p>暫無資訊</p>
+          </div>
         </div>
       </div>
 
