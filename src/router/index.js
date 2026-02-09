@@ -16,7 +16,7 @@ const router = createRouter({
         {
             path: '/filter',
             name: 'filter',
-            component: () => import('../views/FilterView.vue')
+            component: () => import('../views/HomeView.vue')
         },
         {
             path: '/detail',

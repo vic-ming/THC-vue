@@ -8,6 +8,7 @@
           key="world-map-interactive"
           :map-src="currentMap"
           :selected-region="selectedRegion"
+          :region-data="filterRegionList"
           @region-click="handleRegionClick"
           class="map-img"
         />
@@ -288,7 +289,23 @@ const filterRegionList = computed(() => {
   }
   
   return regions.value.map(region => {
-    const factoryCount = region.factories ? region.factories.length : 0
+    // 計算符合當前產品篩選的工廠數量
+    let factoryCount = 0
+    
+    if (region.factories) {
+      if (selectedProducts.value.length === 0) {
+        // 如果沒有選中產品，顯示該區域所有工廠數量
+        factoryCount = region.factories.length
+      } else {
+        // 如果有選中產品，只計算提供這些產品的工廠
+        factoryCount = region.factories.filter(factory => {
+          // 檢查工廠是否提供任何選中的產品
+          const factoryServices = factory.product_services?.map(s => s.name.zh) || []
+          return selectedProducts.value.some(product => factoryServices.includes(product))
+        }).length
+      }
+    }
+    
     // 將區域名稱轉換為小寫英文作為 value（用於路由）
     const regionValue = (region.name.en || '').toLowerCase().replace(/\s+/g, '-')
     

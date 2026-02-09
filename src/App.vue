@@ -64,6 +64,11 @@ onMounted(async () => {
       e.preventDefault()
     }
   })
+
+  // iOS Safari 禁止手勢縮放
+  document.addEventListener('gesturestart', (e) => {
+    e.preventDefault()
+  })
 })
 </script>
 

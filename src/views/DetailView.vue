@@ -9,7 +9,7 @@
       <div class="top-img-wrapper">
         <div class="top-img-container">
           <img :src="topImage" alt="detail-top" class="top-img opacity-40" />
-          <div class="top-title">
+          <div class="top-title" :class="locale === 'en' ? 'text-[52px] leading-[60px]' : 'text-[67px] leading-[96px]'">
             {{ currentFactory ? (locale === 'zh-TW' ? currentFactory.name.zh : currentFactory.name.en) : '工廠詳情' }}
           </div>
         </div>
@@ -141,12 +141,13 @@
         <div v-if="selectedMenu === 'video360'" class="common-content !z-[5]">
           <div class="popup-mask" @click="selectedMenu = 'introduction'"></div>
           <div class="video-content">
-            <video-player
+            <Video360
               ref="video360PlayerRef"
               class="video-player"
               :src="video360Src"
-              :options="playerOptions"
-              @mounted="onPlayerMounted"
+              :autoplay="true"
+              :muted="false"
+              :loop="true"
             />
           </div>
           <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
@@ -159,6 +160,7 @@
 <script setup>
 import { useRouter, useRoute } from 'vue-router'
 import Layout from '../components/layout/layout.vue'
+import Video360 from '../components/Video360.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, ref, reactive } from 'vue'
 import { useAppData } from '../composables/useAppData.js'
@@ -425,7 +427,7 @@ const rightMenu = computed(() => [
   object-position: center;
 }
 .top-title{
-  @apply text-[67px] font-[900] text-[#2B74C6] absolute right-[207px] top-[50px] leading-[96px] w-[670px];
+  @apply font-[900] text-[#2B74C6] absolute right-[207px] top-[50px] w-[700px];
   letter-spacing: 1px;
   text-shadow: 
     -4px -4px 0 #fff,
