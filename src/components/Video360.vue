@@ -56,8 +56,8 @@ const isMuted = ref(props.muted)
 let scene, camera, renderer, controls, video, texture, mesh
 
 const processedSrc = computed(() => {
-    // In development, use proxy to bypass CORS if URL points to API server
-    if (import.meta.env.DEV && props.src && props.src.startsWith('https://honchuan.vjinc.biz')) {
+    // Always use proxy/rewrite to bypass CORS if URL points to API server
+    if (props.src && props.src.startsWith('https://honchuan.vjinc.biz')) {
         const proxied = props.src.replace('https://honchuan.vjinc.biz', '')
         console.log('Video360: Using proxied URL:', proxied)
         return proxied

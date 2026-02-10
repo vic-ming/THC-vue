@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/storage/:path*",
+            "destination": "https://honchuan.vjinc.biz/storage/:path*"
+        }
+    ]
+}
