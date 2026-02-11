@@ -5,13 +5,19 @@
       :data="mapSrc" 
       type="image/svg+xml"
       class="interactive-region-map"
+      :class="{ 'is-ready': mapReady }"
       @load="onMapLoad"
     ></object>
+    <!-- 載入中遮罩 -->
+    <div v-if="!mapReady" class="map-loading-overlay">
+      <div class="loading-spinner"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, watch, defineProps, defineEmits } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   mapSrc: {
@@ -34,87 +40,92 @@ const props = defineProps({
 
 const emit = defineEmits(['factory-click'])
 
+const { locale } = useI18n()
+
 const svgObject = ref(null)
 const mapContainer = ref(null)
 const svgDoc = ref(null)
+const rectCache = ref({}) // Cache original rect dimensions { filterId: { x, width } }
+const mapReady = ref(false)
 
 const onMapLoad = () => {
   console.log('Region map loaded:', props.region)
+  mapReady.value = false
   setTimeout(() => {
     initializeMap()
   }, 100)
 }
 
-// 特定區域的工廠對應表 (SVG filter ID -> Factory ID)
-// 這裡可以手動設定每個地區的 SVG 元素與工廠 ID 的開發對應關係
+// 特定區域的工廠對應表 (SVG filter ID -> Factory ID + Expand Direction)
+// expandDirection: 'left' (向左延伸), 'right' (向右延伸)
 const REGION_MAPPINGS = {
   'taiwan': {
-    'filter10': 7, // 可口可樂桃園廠 (In-house廠)
-    'filter11': 6, // 統一瑞芳廠(In-house廠)
-    'filter12': 1, // 集團總部 (總公司 / 台中一廠)
-    'filter13': 3, // 台中無菌飲料一廠
-    'filter14': 4, // 台中無菌飲料二廠
-    'filter15': 2, // 台中二廠
-    'filter16': 5, // 台中無菌飲料三廠
-    'filter17': 8, // 光泉嘉義廠 (In-house廠)
-    'filter18': 9, // 味丹沙鹿廠 (In-house廠)
-    'filter19': 10, // 台中自貿廠園區
+    'filter10': { id: 7, expandDirection: 'left' }, // 可口可樂桃園廠 (In-house廠)
+    'filter11': { id: 6, expandDirection: 'right' }, // 統一瑞芳廠(In-house廠)
+    'filter12': { id: 1, expandDirection: 'right' }, // 集團總部 (總公司 / 台中一廠)
+    'filter13': { id: 3, expandDirection: 'left' }, // 台中無菌飲料一廠
+    'filter14': { id: 4, expandDirection: 'left' }, // 台中無菌飲料二廠
+    'filter15': { id: 2, expandDirection: 'right' }, // 台中二廠
+    'filter16': { id: 5, expandDirection: 'left' }, // 台中無菌飲料三廠
+    'filter17': { id: 8, expandDirection: 'left' }, // 光泉嘉義廠 (In-house廠)
+    'filter18': { id: 9, expandDirection: 'right' }, // 味丹沙鹿廠 (In-house廠)
+    'filter19': { id: 10, expandDirection: 'left' },  // 台中自貿廠園區
   },
   'china': {
-    'filter14': 23, // 浙江衢州東鵬廠 (In-house廠)
-    'filter15': 24, // 浙江常山廠 (In-house廠)
-    'filter16': 19, // 安徽滁州宏全廠
-    'filter17': 18, // 河南漯河廠
-    'filter18': 20, // 安徽滁州東鵬廠 (In-house廠)
-    'filter19': 11, // 蘇州宏全 (大陸總部)
-    'filter20': 12, // 蘇州宏星廠
-    'filter21': 13, // 湖南長沙廠
-    'filter22': 14, // 山西太原廠
-    'filter23': 15, // 山東濟南廠
-    'filter24': 16, // 廣東清新無菌飲料廠
-    'filter25': 17, // 福建漳州無菌飲料廠
-    'filter26': 22, // 廣東佛山廠 (In-house廠)
-    'filter27': 21, // 湖北仙桃無菌飲料廠 (In-house廠)
+    'filter14': { id: 23, expandDirection: 'right' }, // 浙江衢州東鵬廠 (In-house廠)
+    'filter15': { id: 24, expandDirection: 'right' }, // 浙江常山廠 (In-house廠)
+    'filter16': { id: 19, expandDirection: 'left' }, // 安徽滁州宏全廠
+    'filter17': { id: 18, expandDirection: 'left' }, // 河南漯河廠
+    'filter18': { id: 20, expandDirection: 'left' }, // 安徽滁州東鵬廠 (In-house廠)
+    'filter19': { id: 11, expandDirection: 'right' }, // 蘇州宏全 (大陸總部)
+    'filter20': { id: 12, expandDirection: 'right' }, // 蘇州宏星廠
+    'filter21': { id: 13, expandDirection: 'left' }, // 湖南長沙廠
+    'filter22': { id: 14, expandDirection: 'left' }, // 山西太原廠
+    'filter23': { id: 15, expandDirection: 'right' }, // 山東濟南廠
+    'filter24': { id: 16, expandDirection: 'left' }, // 廣東清新無菌飲料廠
+    'filter25': { id: 17, expandDirection: 'right' }, // 福建漳州無菌飲料廠
+    'filter26': { id: 22, expandDirection: 'right' }, // 廣東佛山廠 (In-house廠)
+    'filter27': { id: 21, expandDirection: 'left' }, // 湖北仙桃無菌飲料廠 (In-house廠)
   },
   'indonesia': {
-    'filter0': 27, // 印尼泗水無菌飲料廠
-    'filter1': 31, // 印尼Pandeglang廠(In-house廠)
-    'filter2': 30, // 印尼美娜多廠
-    'filter3': 28, // 印尼Cibitung無菌飲料廠(In-house廠)
-    'filter4': 25, // 印尼KIIC無菌飲料廠
-    'filter5': 26, // 印尼總廠
-    'filter6': 29, // 印尼Futami廠(In-house廠)
+    'filter0': { id: 27, expandDirection: 'right' }, // 印尼泗水無菌飲料廠
+    'filter1': { id: 31, expandDirection: 'left' }, // 印尼Pandeglang廠(In-house廠)
+    'filter2': { id: 30, expandDirection: 'left' }, // 印尼美娜多廠
+    'filter3': { id: 28, expandDirection: 'left' }, // 印尼Cibitung無菌飲料廠(In-house廠)
+    'filter4': { id: 25, expandDirection: 'right' }, // 印尼KIIC無菌飲料廠
+    'filter5': { id: 26, expandDirection: 'left' }, // 印尼總廠
+    'filter6': { id: 29, expandDirection: 'left' }, // 印尼Futami廠(In-house廠)
   },
   'vietnam': {
-    'filter5': 32, // 越南總廠
-    'filter6': 33, // 越南VSIP 2A 廠
-    'filter7': 34, // 越南Masan北部廠
-    'filter8': 35, // 越南Masan南部廠(In-house廠)
-    'filter9': 36, // 越南Masan西部廠(In-house廠)
+    'filter5': { id: 32, expandDirection: 'right' }, // 越南總廠
+    'filter6': { id: 33, expandDirection: 'left' }, // 越南VSIP 2A 廠
+    'filter7': { id: 34, expandDirection: 'right' }, // 越南Masan北部廠
+    'filter8': { id: 35, expandDirection: 'right' }, // 越南Masan南部廠(In-house廠)
+    'filter9': { id: 36, expandDirection: 'left' }, // 越南Masan西部廠(In-house廠)
   },
   'thailand': {
-    'filter4': 37, // 泰國總廠
-    'filter6': 39, // 泰國宏信無菌飲料廠
-    'filter7': 41, // 泰國 Foodstar 廠
-    'filter8': 38, // 泰國宏福廠
-    'filter9': 40, // 泰國佛統廠(In-house廠)
+    'filter4': { id: 37, expandDirection: 'left' }, // 泰國總廠
+    'filter6': { id: 39, expandDirection: 'right' }, // 泰國宏信無菌飲料廠
+    'filter7': { id: 41, expandDirection: 'left' }, // 泰國 Foodstar 廠
+    'filter8': { id: 38, expandDirection: 'right' }, // 泰國宏福廠
+    'filter9': { id: 40, expandDirection: 'left' }, // 泰國佛統廠(In-house廠)
   },
   'malaysia': {
-    'filter0': 43, // 馬來西亞Cocoaland廠(In-house廠)
-    'filter1': 42, // 馬來西亞總廠
+    'filter0': { id: 43, expandDirection: 'left' }, // 馬來西亞Cocoaland廠(In-house廠)
+    'filter1': { id: 42, expandDirection: 'right' }, // 馬來西亞總廠
   },
   'myanmar': {
-    'filter0': 44, // 緬甸總廠
-    'filter5': 45, // 緬甸宏佳廠
-    'filter6': 46, // 緬甸
-    'filter7': 47, // 緬甸聯通廠
+    'filter0': { id: 44, expandDirection: 'right' }, // 緬甸總廠
+    'filter5': { id: 45, expandDirection: 'left' }, // 緬甸宏佳廠
+    'filter6': { id: 46, expandDirection: 'right' }, // 緬甸KH廠
+    'filter7': { id: 47, expandDirection: 'left' }, // 緬甸聯通廠
   },
   'cambodia': {
-    'filter0': 48, // 柬埔寨宏全廠
+    'filter0': { id: 48, expandDirection: 'left' }, // 柬埔寨宏全廠
   },
   'mozambique': {
-    'filter2': 49, // 莫三比克宏正廠
-    'filter3': 50, // 莫三比克Shimada廠
+    'filter2': { id: 49, expandDirection: 'left' }, // 莫三比克宏正廠
+    'filter3': { id: 50, expandDirection: 'right' }, // 莫三比克Shimada廠
   }
 }
 
@@ -132,11 +143,16 @@ const ICON_MAPPINGS = {
   'mozambique': {}
 }
 
-const initializeMap = () => {
+const initializeMap = async () => {
   if (!svgObject.value) {
     console.error('SVG object not found')
     return
   }
+  
+  mapReady.value = false
+  
+  // 清除緩存，確保每次初始化都使用原始尺寸
+  rectCache.value = {}
   
   try {
     svgDoc.value = svgObject.value.contentDocument || svgObject.value.getSVGDocument()
@@ -218,6 +234,25 @@ const initializeMap = () => {
     })
     
     console.log(`Region: ${props.region}, Found ${blueRectGroups.length} markers`)
+    
+    // 在進行任何修改之前，先緩存所有按鈕的原始尺寸
+    blueRectGroups.forEach((element) => {
+      const filterAttr = element.getAttribute('filter')
+      const filterId = filterAttr?.match(/filter(\d+)/)?.[1]
+      const filterKey = `filter${filterId}`
+      
+      if (!rectCache.value[filterKey]) {
+        const rect = element.querySelector('rect')
+        if (rect) {
+          const origX = parseFloat(rect.getAttribute('x'))
+          const origW = parseFloat(rect.getAttribute('width'))
+          if (!isNaN(origX) && !isNaN(origW)) {
+            rectCache.value[filterKey] = { x: origX, width: origW }
+            console.log(`[Initial Cache] ${filterKey}: x=${origX}, width=${origW}`)
+          }
+        }
+      }
+    })
     
     // 獲取當前區域的特定映射配置
     const regionConfig = REGION_MAPPINGS[props.region] || {}
@@ -337,9 +372,10 @@ const initializeMap = () => {
       
       let factory = null
       
-      // 策略 策略 1: 檢查是否有明確的 Filter ID 映射到 Factory ID
-      const explicitId = regionConfig[`filter${filterId}`]
-      if (explicitId) {
+      // 策略 1: 檢查是否有明確的 Filter ID 映射到 Factory ID
+      const explicitMapping = regionConfig[`filter${filterId}`]
+      if (explicitMapping) {
+        const explicitId = explicitMapping.id
         factory = props.factories.find(f => String(f.id) === String(explicitId))
       }
       
@@ -657,11 +693,214 @@ const initializeMap = () => {
       }
     })
     
+    // 渲染工廠名稱（動態文字）
+    // 使用 setTimeout 確保按鈕完全渲染後再測量文字寬度
+    setTimeout(async () => {
+      await renderFactoryNames(blueRectGroups, regionConfig)
+      mapReady.value = true
+      console.log('Region map fully initialized and visible')
+    }, 200)
+    
     console.log(`Initialized ${blueRectGroups.length} markers for ${props.region}`)
   } catch (error) {
     console.error('Error initializing region map:', error)
   }
 }
+
+// 渲染工廠名稱（動態文字）
+const renderFactoryNames = (blueRectGroups, regionConfig) => {
+  if (!svgDoc.value || !blueRectGroups || blueRectGroups.length === 0) {
+    return Promise.resolve()
+  }
+
+  const promises = blueRectGroups.map((element) => {
+    return new Promise((resolve) => {
+      const filterAttr = element.getAttribute('filter')
+      const filterId = filterAttr?.match(/filter(\d+)/)?.[1]
+      const filterKey = `filter${filterId}`
+      
+      // 獲取工廠配置
+      const mapping = regionConfig[filterKey]
+      if (!mapping) return resolve()
+      
+      // 查找對應的工廠
+      const factory = props.factories.find(f => String(f.id) === String(mapping.id))
+      if (!factory) return resolve()
+      
+      // 檢查是否應該顯示這個按鈕（根據產品篩選）
+      let shouldShow = true
+      if (props.selectedProducts.length > 0) {
+        const factoryServices = factory.product_services?.map(s => s.name.zh) || []
+        shouldShow = props.selectedProducts.some(product => 
+          factoryServices.includes(product)
+        )
+      }
+      
+      // 如果按鈕被隱藏，跳過渲染
+      if (!shouldShow) return resolve()
+      
+      // 1. 隱藏所有原始路徑 (包含文字、箭頭等)
+      const paths = element.querySelectorAll('path')
+      paths.forEach(path => {
+        path.style.display = 'none'
+      })
+      
+      // 2. 找到背景 Rect
+      const rect = element.querySelector('rect')
+      if (!rect) return resolve()
+      
+      // 3. 獲取緩存的原始尺寸
+      const { x: baseX, width: baseWidth } = rectCache.value[filterKey] || { x: 0, width: 90 }
+      
+      // 4. 創建或更新文本元素
+      let textId = `factory-text-${filterKey}`
+      let textEl = svgDoc.value.getElementById(textId)
+      
+      if (!textEl) {
+        textEl = document.createElementNS("http://www.w3.org/2000/svg", "text")
+        textEl.setAttribute("id", textId)
+        textEl.setAttribute("fill", "#FEFBF9")
+        textEl.setAttribute("dominant-baseline", "middle")
+        textEl.setAttribute("text-anchor", "middle")
+        textEl.setAttribute("font-size", "16")
+        textEl.setAttribute("font-weight", "bold")
+        textEl.setAttribute("pointer-events", "none")
+        textEl.style.userSelect = "none"
+        
+        element.appendChild(textEl)
+      }
+      
+      // 5. 設置文字內容（根據 locale），支持在 '(' 處換行
+      const factoryName = locale.value === 'zh-TW' ? factory.name.zh : factory.name.en
+      
+      // 清空現有內容
+      textEl.innerHTML = ''
+      
+      // 檢查是否包含 '('，如果有則分成兩行
+      if (factoryName.includes('(')) {
+        const parts = factoryName.split('(')
+        const line1 = parts[0].trim()
+        const line2 = '(' + parts.slice(1).join('(')
+        
+        // 創建第一行
+        const tspan1 = document.createElementNS("http://www.w3.org/2000/svg", "tspan")
+        tspan1.textContent = line1
+        tspan1.setAttribute("x", "0")
+        textEl.appendChild(tspan1)
+        
+        // 創建第二行
+        const tspan2 = document.createElementNS("http://www.w3.org/2000/svg", "tspan")
+        tspan2.textContent = line2
+        tspan2.setAttribute("x", "0")
+        textEl.appendChild(tspan2)
+      } else {
+        // 單行文字
+        textEl.textContent = factoryName
+      }
+      
+      // 6. 使用 requestAnimationFrame 確保在計算寬度前 DOM 已更新
+      requestAnimationFrame(() => {
+        let requiredWidth = baseWidth
+        try {
+          let maxTextWidth = 0
+          
+          // 如果是多行文字，計算每一行的寬度，取最大值
+          if (textEl.children.length > 0) {
+            for (let i = 0; i < textEl.children.length; i++) {
+              const tspan = textEl.children[i]
+              const tspanWidth = tspan.getComputedTextLength()
+              if (tspanWidth > maxTextWidth) {
+                maxTextWidth = tspanWidth
+              }
+            }
+          } else {
+            // 單行文字
+            maxTextWidth = textEl.getComputedTextLength()
+          }
+          
+          const padding = 40
+          if (maxTextWidth + padding > baseWidth) {
+            requiredWidth = maxTextWidth + padding
+          }
+        } catch (e) {
+          console.warn('Cannot measure text length', e)
+          const estimatedWidth = factoryName.length * 10 + 40
+          if (estimatedWidth > baseWidth) requiredWidth = estimatedWidth
+        }
+        
+        // 7. 根據擴展方向調整 rect 的 x 坐標
+        let newX = baseX
+        if (mapping.expandDirection === 'left') {
+          // 向左擴展：右邊界固定
+          newX = (baseX + baseWidth) - requiredWidth
+        } else {
+          // 向右擴展：左邊界固定
+          newX = baseX
+        }
+        
+        // 8. 更新 rect 尺寸 (使用 setAttributeNS 確保 SVG 正確更新)
+        rect.setAttributeNS(null, 'width', String(requiredWidth))
+        rect.setAttributeNS(null, 'x', String(newX))
+        
+        // 檢查並調整 filter 範圍
+        const parentGroup = rect.parentElement
+        if (parentGroup) {
+          const filterAttr = parentGroup.getAttribute('filter')
+          if (filterAttr) {
+            const filterId = filterAttr.replace('url(#', '').replace(')', '')
+            const filterEl = svgDoc.value.getElementById(filterId)
+            if (filterEl) {
+              filterEl.setAttributeNS(null, 'x', '-100%')
+              filterEl.setAttributeNS(null, 'y', '-100%')
+              filterEl.setAttributeNS(null, 'width', '300%')
+              filterEl.setAttributeNS(null, 'height', '300%')
+            }
+          }
+        }
+        
+        // 強制 SVG 重繪
+        rect.style.display = 'none'
+        rect.offsetHeight // 觸發 reflow
+        rect.style.display = ''
+        
+        // 9. 更新文字位置（居中於新的 rect）
+        const centerX = newX + requiredWidth / 2
+        
+        let finalCenterY = baseX + 20
+        if (rect) {
+          const h = parseFloat(rect.getAttribute('height'))
+          const ry = parseFloat(rect.getAttribute('y'))
+          if (!isNaN(h) && !isNaN(ry)) {
+            finalCenterY = ry + h / 2
+          }
+        }
+        
+        // 設置文字位置
+        textEl.setAttribute("x", centerX)
+        
+        // 如果是多行文字，需要調整每一行的位置
+        if (textEl.children.length > 0) {
+          const lineHeight = 18 // 行高
+          const totalHeight = textEl.children.length * lineHeight
+          const startY = finalCenterY - totalHeight / 2 + lineHeight / 2
+          
+          for (let i = 0; i < textEl.children.length; i++) {
+            const tspan = textEl.children[i]
+            tspan.setAttribute("x", centerX)
+            tspan.setAttribute("y", startY + i * lineHeight)
+            tspan.removeAttribute("dy")
+          }
+        } else {
+          textEl.setAttribute("y", finalCenterY)
+        }
+        resolve()
+      })
+    })
+  })
+  
+  return Promise.all(promises)
+}
+
 
 const handleFactoryClick = (factory, index) => {
   console.log('Factory clicked:', factory.name, 'Index:', index)
@@ -695,6 +934,15 @@ watch(() => props.selectedProducts, () => {
     initializeMap()
   }
 }, { deep: true })
+
+// 當語言切換時重新渲染工廠名稱
+watch(locale, () => {
+  if (svgDoc.value) {
+    console.log('Locale changed, re-rendering factory names')
+    // 重新初始化以更新文字
+    initializeMap()
+  }
+})
 </script>
 
 <style scoped>
@@ -706,5 +954,37 @@ watch(() => props.selectedProducts, () => {
   width: 100%;
   height: 100%;
   pointer-events: all;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.interactive-region-map.is-ready {
+  opacity: 1;
+}
+
+.map-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background: transparent;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 78, 162, 0.1);
+  border-left-color: #004EA2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
