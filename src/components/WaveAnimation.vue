@@ -30,7 +30,7 @@
 <style scoped>
 .waves-container {
   width: 100%;
-  height: 120px;
+  height: 140px;
   /* Ensure it sits at the bottom if used in a specific layout */
 }
 
@@ -47,19 +47,19 @@
 }
 .parallax > use:nth-child(1) {
   animation-delay: -2s;
-  animation-duration: 7s;
+  animation-duration: 30s;
 }
 .parallax > use:nth-child(2) {
   animation-delay: -3s;
-  animation-duration: 10s;
+  animation-duration: 30s;
 }
 .parallax > use:nth-child(3) {
   animation-delay: -4s;
-  animation-duration: 13s;
+  animation-duration: 30s;
 }
 .parallax > use:nth-child(4) {
   animation-delay: -5s;
-  animation-duration: 20s;
+  animation-duration: 30s;
 }
 
 @keyframes move-forever {
