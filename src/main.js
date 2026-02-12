@@ -10,3 +10,8 @@ app.use(router)
 app.use(i18n)
 
 app.mount('#app')
+
+// Disable context menu on touch devices
+window.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+}, false);
