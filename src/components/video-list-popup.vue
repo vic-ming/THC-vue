@@ -131,7 +131,7 @@ const onPlayerMounted = (player) => {
   }
 
   .video-list {
-    @apply grid grid-cols-3 gap-[32px];
+    @apply grid grid-cols-3 gap-[32px] items-end;
   }
 
   .video-item {
@@ -139,6 +139,10 @@ const onPlayerMounted = (player) => {
     
     .video-title {
       @apply text-[32px] font-[700] text-[#2B74C6] text-left;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
 
     .video-thumbnail {
