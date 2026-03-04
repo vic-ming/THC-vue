@@ -54,7 +54,7 @@
       <!-- 關於本廠 -->
       <div class="detail-content">
         <div class="detail-info">
-          <div class="date">{{ t('factory.establishmentDate') }} <span>2023/12</span></div>
+          <div class="date">{{ t('factory.establishmentDate') }} <span>{{ currentFactory.established_date || '-' }}</span></div>
           <div class="country">{{ currentRegion ? (locale === 'zh-TW' ? currentRegion.name.zh : currentRegion.name.en) : '' }}</div>
           <div class="address">{{ currentFactory ? (locale === 'zh-TW' ? currentFactory.address.zh : currentFactory.address.en) : 'address'}}</div>
         </div>
@@ -608,4 +608,4 @@ const rightMenu = computed(() => [
 .page-fade-enter-from {
   opacity: 0;
 }
-</style>
+</style> 
