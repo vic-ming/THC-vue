@@ -40,15 +40,15 @@ const isMapReady = ref(false)
 // 增加 textX, textY 用於顯示數字
 // expandDirection: 'left' (cursor on right, expand left), 'right' (cursor on left, expand right)
 const regionMarkers = {
-  'taiwan': { selector: 'g[filter="url(#filter8_d_1497_16647)"]', x: 616, y: 396, textX: 661, textY: 423, expandDirection: 'right' },
-  'china': { selector: 'g[filter="url(#filter9_d_1497_16647)"]', x: 385, y: 312, textX: 430, textY: 339, expandDirection: 'left' },
-  'mozambique': { selector: 'g[filter="url(#filter10_d_1497_16647)"]', x: 264, y: 573, textX: 309, textY: 600, expandDirection: 'right' },
-  'malaysia': { selector: 'g[filter="url(#filter11_d_1497_16647)"]', x: 376, y: 505, textX: 421, textY: 532, expandDirection: 'left' },
-  'myanmar': { selector: 'g[filter="url(#filter12_d_1497_16647)"]', x: 383, y: 371, textX: 428, textY: 398, expandDirection: 'left' },
-  'indonesia': { selector: 'g[filter="url(#filter13_d_1497_16647)"]', x: 567, y: 524, textX: 612, textY: 551, expandDirection: 'right' },
-  'vietnam': { selector: 'g[filter="url(#filter14_d_1497_16647)"]', x: 562, y: 439, textX: 607, textY: 466, expandDirection: 'right' },
-  'cambodia': { selector: 'g[filter="url(#filter15_d_1497_16647)"]', x: 399, y: 460, textX: 444, textY: 487, expandDirection: 'left' },
-  'thailand': { selector: 'g[filter="url(#filter16_d_1497_16647)"]', x: 402, y: 416, textX: 447, textY: 443, expandDirection: 'left' }
+  'taiwan': { selector: 'g[filter="url(#filter8_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter1_dd_1497_16647)"]', x: 616, y: 396, textX: 661, textY: 423, expandDirection: 'right' },
+  'china': { selector: 'g[filter="url(#filter9_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter4_dd_1497_16647)"]', x: 385, y: 312, textX: 430, textY: 339, expandDirection: 'left' },
+  'mozambique': { selector: 'g[filter="url(#filter10_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter0_dd_1497_16647)"]', x: 264, y: 573, textX: 309, textY: 600, expandDirection: 'right' },
+  'malaysia': { selector: 'g[filter="url(#filter11_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter2_dd_1497_16647)"]', x: 376, y: 505, textX: 421, textY: 532, expandDirection: 'left' },
+  'myanmar': { selector: 'g[filter="url(#filter12_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter5_dd_1497_16647)"]', x: 383, y: 371, textX: 428, textY: 398, expandDirection: 'left' },
+  'indonesia': { selector: 'g[filter="url(#filter13_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter3_dd_1497_16647)"]', x: 567, y: 524, textX: 612, textY: 551, expandDirection: 'right' },
+  'vietnam': { selector: 'g[filter="url(#filter14_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter6_dd_1497_16647)"]', x: 562, y: 439, textX: 607, textY: 466, expandDirection: 'right' },
+  'cambodia': { selector: 'g[filter="url(#filter15_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter17_dd_1497_16647)"]', x: 399, y: 460, textX: 444, textY: 487, expandDirection: 'left' },
+  'thailand': { selector: 'g[filter="url(#filter16_d_1497_16647)"]', iconSelector: 'g[filter="url(#filter7_dd_1497_16647)"]', x: 402, y: 416, textX: 447, textY: 443, expandDirection: 'left' }
 }
 
 const rectCache = ref({}) // Cache original rect dimensions { id: { x, width } }
@@ -73,10 +73,47 @@ const initializeMap = () => {
       return
     }
 
+    // 注入動畫樣式
+    if (!svgDoc.value.getElementById('map-animations')) {
+      const style = svgDoc.value.createElementNS('http://www.w3.org/2000/svg', 'style')
+      style.setAttribute('id', 'map-animations')
+      style.textContent = `
+        @keyframes bounce-pin {
+          0%, 100% { transform: scale(0.9); }
+          50% { transform: scale(1.05); }
+        }
+        .bounce-pin-group > ellipse,
+        .bounce-pin-group > path {
+          transform-origin: center center;
+          transform-box: fill-box;
+          animation: bounce-pin 1.5s infinite ease-in-out;
+        }
+      `
+      const svgRoot = svgDoc.value.querySelector('svg') || svgDoc.value.documentElement
+      svgRoot.appendChild(style)
+    }
+
     // 為每個區域標記添加點擊事件和樣式
     Object.entries(regionMarkers).forEach(([region, config]) => {
       const element = svgDoc.value.querySelector(config.selector)
+      const iconGroup = config.iconSelector ? svgDoc.value.querySelector(config.iconSelector) : null
       
+      if (iconGroup) {
+        // 為標記(Pin)加入動畫 class
+        iconGroup.classList.add('bounce-pin-group')
+        
+        // 擴大 pin 的濾鏡範圍，避免 bounce 向上移動時被裁切
+        const iconFilterUrl = iconGroup.getAttribute('filter')
+        if (iconFilterUrl) {
+          const filterId = iconFilterUrl.replace('url(#', '').replace(')', '')
+          const filterEl = svgDoc.value.getElementById(filterId)
+          if (filterEl) {
+            filterEl.setAttribute('y', '-100%')
+            filterEl.setAttribute('height', '300%')
+          }
+        }
+      }
+
       if (element) {
         // 擴大濾鏡範圍以防止按鈕延伸時被裁切
         const filterUrl = element.getAttribute('filter')
@@ -151,32 +188,64 @@ const renderRegionCounts = () => {
     const group = svgDoc.value.querySelector(config.selector)
     if (!group) return
 
-    // 1. 隱藏所有原始路徑 (包含文字、箭頭、數字)
+    const labelRect = group.querySelector('rect')
+    if (!labelRect) return
+
+    // 尋找關聯的圖標 (Pin/Dot) - 使用手動指定的 iconSelector
+    const associatedIcon = config.iconSelector ? svgDoc.value.querySelector(config.iconSelector) : null
+
+    const elementsToToggle = [group]
+    if (associatedIcon) elementsToToggle.push(associatedIcon)
+
+    // 0. 根據 count 決定是否顯示 (帶淡入淡出效果)
+    const shouldShow = count > 0
+    
+    if (shouldShow) {
+      elementsToToggle.forEach(el => {
+        if (el._hideTimeout) {
+          clearTimeout(el._hideTimeout)
+          el._hideTimeout = null
+        }
+        el.style.display = ''
+        // 使用 setTimeout 確保過渡生效
+        setTimeout(() => {
+          el.style.transition = 'opacity 0.4s ease-in-out'
+          el.style.opacity = '1'
+        }, 10)
+      })
+    } else {
+      elementsToToggle.forEach(el => {
+        el.style.transition = 'opacity 0.4s ease-in-out'
+        el.style.opacity = '0'
+        if (!el._hideTimeout) {
+          el._hideTimeout = setTimeout(() => {
+            el.style.display = 'none'
+            el._hideTimeout = null
+          }, 400)
+        }
+      })
+    }
+
+    if (!shouldShow) return
+
+    // 1. 隱藏按鈕內部所有原始路徑 (包含原始文字、箭頭、數字等)
     const paths = group.querySelectorAll('path')
     paths.forEach(path => {
       path.style.display = 'none'
     })
     
-    // 2. 找到背景 Rect
-    const rect = group.querySelector('rect')
-    
-    if (rect) {
-      // 緩存原始尺寸以作為變更的基準
-      if (!rectCache.value[regionKey]) {
-        const origX = parseFloat(rect.getAttribute('x'))
-        const origW = parseFloat(rect.getAttribute('width'))
-        if (!isNaN(origX) && !isNaN(origW)) {
-          rectCache.value[regionKey] = { x: origX, width: origW }
-        } else {
-             // Fallback to config if DOM attrs are missing/invalid
-             rectCache.value[regionKey] = { x: config.x, width: 90 } // Assuming default width 90
-        }
+    // 2. 緩存 Rect 原始尺寸 (若尚未緩存)
+    if (!rectCache.value[regionKey]) {
+      const origX = parseFloat(labelRect.getAttribute('x'))
+      const origW = parseFloat(labelRect.getAttribute('width'))
+      if (!isNaN(origX) && !isNaN(origW)) {
+        rectCache.value[regionKey] = { x: origX, width: origW }
       }
     }
     
     const { x: baseX, width: baseWidth } = rectCache.value[regionKey] || { x: config.x, width: 90 }
     
-    // 3. 創建或更新文本元素
+    // 3. 創建或更新動態文本元素
     let textId = `count-text-${regionKey}`
     let textEl = svgDoc.value.getElementById(textId)
 
@@ -190,70 +259,45 @@ const renderRegionCounts = () => {
       textEl.setAttribute("font-weight", "bold")
       textEl.setAttribute("pointer-events", "none")
       textEl.style.userSelect = "none"
-      
       group.appendChild(textEl)
     }
     
-    // 設置文字內容以便計算寬度
     textEl.textContent = `${regionInfo.name} (${count})`
     
-    // 使用 requestAnimationFrame 確保在計算寬度前 DOM 已更新
+    // 4. 動態調整按鈕寬度與文字位置
     requestAnimationFrame(() => {
         let requiredWidth = baseWidth
         try {
-          const bbox = textEl.getComputedTextLength()
-          const padding = 40 // 增加 padding 避免太擠
-          if (bbox + padding > baseWidth) {
-            requiredWidth = bbox + padding
+          const textLen = textEl.getComputedTextLength()
+          const padding = 40
+          if (textLen + padding > baseWidth) {
+            requiredWidth = textLen + padding
           }
         } catch (e) {
-          console.warn('Cannot measure text length', e)
-          // Fallback based on char count
-          const estimatedWidth = textEl.textContent.length * 10 + 40
-          if (estimatedWidth > baseWidth) requiredWidth = estimatedWidth
+          requiredWidth = textEl.textContent.length * 10 + 40
         }
 
-        // 根據擴展方向調整 rect 的 x 坐標
         let newX = baseX
         if (config.expandDirection === 'left') {
-          // 向左擴展：右邊界固定 (baseX + baseWidth)
-          // newX = (baseX + baseWidth) - requiredWidth
           newX = (baseX + baseWidth) - requiredWidth
-        } else {
-          // 向右擴展：左邊界固定 (baseX)
-          // newX = baseX
-          newX = baseX
         }
         
-        if (rect) {
-          rect.setAttribute('width', requiredWidth)
-          rect.setAttribute('x', newX)
-          if (regionKey === 'taiwan') {
-          }
-        }
+        labelRect.setAttribute('width', requiredWidth)
+        labelRect.setAttribute('x', newX)
         
-        // 更新文字位置 (居中於新的 rect)
         const centerX = newX + requiredWidth / 2
-        
-        // 如果 rect 存在，嘗試從 rect 獲取高度以計算 centerY
-        let finalCenterY = config.y + 20
-        if (rect) {
-            const h = parseFloat(rect.getAttribute('height'))
-            const ry = parseFloat(rect.getAttribute('y'))
-            if (!isNaN(h) && !isNaN(ry)) {
-                finalCenterY = ry + h / 2
-            }
-        }
+        const h = parseFloat(labelRect.getAttribute('height'))
+        const ry = parseFloat(labelRect.getAttribute('y'))
+        const centerY = (!isNaN(h) && !isNaN(ry)) ? ry + h/2 : config.y + 20
 
         textEl.setAttribute("x", centerX)
-        textEl.setAttribute("y", finalCenterY)
+        textEl.setAttribute("y", centerY)
     })
   })
 }
 
-// ... (rest of the code)
-
 const handleRegionClick = (region) => {
+
   console.log('Region clicked:', region)
   emit('region-click', region)
 }
