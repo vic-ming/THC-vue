@@ -30,7 +30,7 @@
         <img 
           v-else-if="currentMapMode === 'landmark'" 
           key="landmark" 
-          class="map-img" 
+          class="map-img-2" 
           :src="salesLocationImage" 
           alt="Logo"
         >

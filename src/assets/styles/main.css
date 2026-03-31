@@ -41,6 +41,10 @@ body {
   @apply w-[1531px] h-[806px] fixed top-[98px] left-[76px] z-[2];
 }
 
+.map-img-2 {
+  @apply w-[1920px] h-[1080px] fixed top-[0px] left-[0px] z-[2];
+}
+
 .right-menu {
   @apply bg-white fixed right-0 bottom-[260px] p-[10px] pr-0 z-[3];
   box-shadow: 2px 0px 8px 0px #00000066;
