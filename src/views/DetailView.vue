@@ -9,9 +9,7 @@
       <div class="top-img-wrapper">
         <div class="top-img-container">
           <img :src="topImage" alt="detail-top" class="top-img opacity-40" />
-          <div class="top-title" :class="locale === 'en' ? 'text-[52px] leading-[60px]' : 'text-[67px] leading-[96px]'" v-html="currentFactory ? (locale === 'zh-TW' ? getCorrectName(currentFactory.name.zh) : getCorrectName(currentFactory.name.en)) : '工廠詳情'">
-            
-          </div>
+          <div class="top-title" :class="locale === 'en' ? 'text-[52px] leading-[60px]' : 'text-[67px] leading-[96px]'" v-html="currentFactory ? (locale === 'zh-TW' ? getCorrectName(currentFactory.name.zh) : getCorrectName(currentFactory.name.en)) : '工廠詳情'"></div>
         </div>
       </div>
 
@@ -442,15 +440,8 @@ const rightMenu = computed(() => [
 .top-title{
   @apply font-[900] text-[#2B74C6] absolute right-[182px] top-[50px] w-[750px];
   letter-spacing: 1px;
-  text-shadow: 
-    -4px -4px 0 #fff,
-     4px -4px 0 #fff,
-    -4px  4px 0 #fff,
-     4px  4px 0 #fff,
-    -4px  0   0 #fff,
-     4px  0   0 #fff,
-     0   -4px 0 #fff,
-     0    4px 0 #fff;
+  -webkit-text-stroke: 8px #fff;
+  paint-order: stroke fill;
 }
 .right-menu{
   bottom: 175px; 
