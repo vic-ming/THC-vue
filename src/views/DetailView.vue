@@ -9,8 +9,8 @@
       <div class="top-img-wrapper">
         <div class="top-img-container">
           <img :src="topImage" alt="detail-top" class="top-img opacity-40" />
-          <div class="top-title" :class="locale === 'en' ? 'text-[52px] leading-[60px]' : 'text-[67px] leading-[96px]'">
-            {{ currentFactory ? (locale === 'zh-TW' ? currentFactory.name.zh : currentFactory.name.en) : '工廠詳情' }}
+          <div class="top-title" :class="locale === 'en' ? 'text-[52px] leading-[60px]' : 'text-[67px] leading-[96px]'" v-html="currentFactory ? (locale === 'zh-TW' ? getCorrectName(currentFactory.name.zh) : getCorrectName(currentFactory.name.en)) : '工廠詳情'">
+            
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
       <!-- 關於本廠 -->
       <div class="detail-content">
         <div class="detail-info">
-          <div class="date">{{ t('factory.establishmentDate') }} <span>{{ currentFactory.established_date || '-' }}</span></div>
+          <div class="date">{{ t('factory.establishmentDate') }} <span>{{ currentFactory?.established_date || '-' }}</span></div>
           <div class="country">{{ currentRegion ? (locale === 'zh-TW' ? currentRegion.name.zh : currentRegion.name.en) : '' }}</div>
           <div class="address">{{ currentFactory ? (locale === 'zh-TW' ? currentFactory.address.zh : currentFactory.address.en) : 'address'}}</div>
         </div>
@@ -225,6 +225,19 @@ const currentFactory = computed(() => {
   return null
 })
 
+
+const getCorrectName = (name) => {
+  if (name.includes('(')) {
+    const parts = name.split('(')
+    const line1 = parts[0].trim()
+    const line2 = '(' + parts.slice(1).join('(')
+    console.log(line1 + '<br>' + line2);
+    return line1 +'<br>'+ line2
+  } else {
+    return name
+  }
+}
+ 
 // 選中的選單項目
 const selectedMenu = ref('introduction')
 
@@ -427,7 +440,7 @@ const rightMenu = computed(() => [
   object-position: center;
 }
 .top-title{
-  @apply font-[900] text-[#2B74C6] absolute right-[207px] top-[50px] w-[700px];
+  @apply font-[900] text-[#2B74C6] absolute right-[182px] top-[50px] w-[750px];
   letter-spacing: 1px;
   text-shadow: 
     -4px -4px 0 #fff,
@@ -464,15 +477,8 @@ const rightMenu = computed(() => [
   }
   .country{
     @apply leading-[48px] text-[32px] font-[700] text-[#FFC936];
-    text-shadow: 
-      -2px -2px 0 #000,
-       2px -2px 0 #000,
-      -2px  2px 0 #000,
-       2px  2px 0 #000,
-      -2px  0   0 #000,
-       2px  0   0 #000,
-       0   -2px 0 #000,
-       0    2px 0 #000;
+    -webkit-text-stroke: 5px #000;
+    paint-order: stroke fill;
   }
   .address{
     @apply text-[16px] font-[500] text-black leading-[25px];
