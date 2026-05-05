@@ -124,14 +124,37 @@
           <div class="popup-mask" @click="selectedMenu = 'introduction'"></div>
           <div class="video-content">
             <video-player
+              :key="visitVideoSrc"
               ref="videoPlayerRef"
               class="video-player"
               :src="visitVideoSrc"
               :options="playerOptions"
               @mounted="onPlayerMounted"
             />
+            <div class="player-step">
+              <button
+                type="button"
+                aria-label="Switch visit video"
+                :class="{ disabled: !canSwitchVisitVideo }"
+                :disabled="!canSwitchVisitVideo"
+                @click.stop="switchVisitVideo"
+              >
+                <img src="/icon/movie_arrow_left.svg" alt="back">
+              </button>
+              <button
+                type="button"
+                aria-label="Switch visit video"
+                :class="{ disabled: !canSwitchVisitVideo }"
+                :disabled="!canSwitchVisitVideo"
+                @click.stop="switchVisitVideo"
+              >
+                <img src="/icon/movie_arrow_right.svg" alt="next">
+              </button>
+            </div>
           </div>
           <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
+
+          
         </div>
       </Transition>
       <!-- 360 影片 -->
@@ -140,6 +163,7 @@
           <div class="popup-mask" @click="selectedMenu = 'introduction'"></div>
           <div class="video-content">
             <Video360
+              :key="video360Src"
               ref="video360PlayerRef"
               class="video-player"
               :src="video360Src"
@@ -147,6 +171,26 @@
               :muted="false"
               :loop="true"
             />
+            <div class="player-step">
+              <button
+                type="button"
+                aria-label="Switch 360 video"
+                :class="{ disabled: !canSwitchVideo360 }"
+                :disabled="!canSwitchVideo360"
+                @click.stop="switchVideo360"
+              >
+                <img src="/icon/movie_arrow_left.svg" alt="back">
+              </button>
+              <button
+                type="button"
+                aria-label="Switch 360 video"
+                :class="{ disabled: !canSwitchVideo360 }"
+                :disabled="!canSwitchVideo360"
+                @click.stop="switchVideo360"
+              >
+                <img src="/icon/movie_arrow_right.svg" alt="next">
+              </button>
+            </div>
           </div>
           <img class="close-icon" src="/icon/close-icon.svg" alt="Close" @click="selectedMenu = 'introduction'">
         </div>
@@ -160,7 +204,7 @@ import { useRouter, useRoute } from 'vue-router'
 import Layout from '../components/layout/layout.vue'
 import Video360 from '../components/Video360.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, ref, reactive } from 'vue'
+import { computed, ref, reactive, watch } from 'vue'
 import { useAppData } from '../composables/useAppData.js'
 import { VideoPlayer } from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -242,6 +286,8 @@ const selectedMenu = ref('introduction')
 // Video player refs
 const videoPlayerRef = ref(null)
 const video360PlayerRef = ref(null)
+const visitVideoIndex = ref(0)
+const video360Index = ref(0)
 
 // 播放器配置
 const playerOptions = reactive({
@@ -313,19 +359,86 @@ const factoryLogo = computed(() => {
   return currentFactory.value.logo[langKey] || null
 })
 
-// 訪廠影片路徑
-const visitVideoSrc = computed(() => {
-  if (!currentFactory.value?.visit_video) return null
+const getLocalizedMediaSrc = (media) => {
+  if (!media) return null
+  if (typeof media === 'string') return media
+  if (Array.isArray(media)) {
+    for (const item of media) {
+      const src = getLocalizedMediaSrc(item)
+      if (src) return src
+    }
+    return null
+  }
+
   const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
-  return currentFactory.value.visit_video[langKey] || null
+  const fallbackLangKey = langKey === 'zh' ? 'en' : 'zh'
+  const localizedSrc = getLocalizedMediaSrc(media[langKey]) || getLocalizedMediaSrc(media[fallbackLangKey])
+  if (localizedSrc) return localizedSrc
+
+  for (const key of ['url', 'src', 'path', 'file', 'video']) {
+    const src = getLocalizedMediaSrc(media[key])
+    if (src) return src
+  }
+
+  for (const value of Object.values(media)) {
+    const src = getLocalizedMediaSrc(value)
+    if (src) return src
+  }
+
+  return null
+}
+
+const getFactoryVideoList = (fieldNames) => {
+  if (!currentFactory.value) return []
+  return fieldNames
+    .map(fieldName => getLocalizedMediaSrc(currentFactory.value[fieldName]))
+    .filter(Boolean)
+}
+
+// 訪廠影片路徑
+const visitVideos = computed(() => getFactoryVideoList(['visit_video', 'visit_video_2']))
+
+const visitVideoSrc = computed(() => {
+  if (!visitVideos.value.length) return null
+  return visitVideos.value[visitVideoIndex.value] || visitVideos.value[0]
 })
 
 // 360 影片路徑
+const video360Videos = computed(() => getFactoryVideoList(['video_360', 'video_360_2']))
+
 const video360Src = computed(() => {
-  if (!currentFactory.value?.video_360) return null
-  const langKey = locale.value === 'zh-TW' ? 'zh' : 'en'
-  return currentFactory.value.video_360[langKey] || null
+  if (!video360Videos.value.length) return null
+  return video360Videos.value[video360Index.value] || video360Videos.value[0]
 })
+
+const canSwitchVisitVideo = computed(() => visitVideos.value.length > 1)
+const canSwitchVideo360 = computed(() => video360Videos.value.length > 1)
+
+watch(visitVideos, (videos) => {
+  if (visitVideoIndex.value >= videos.length) {
+    visitVideoIndex.value = 0
+  }
+})
+
+watch(video360Videos, (videos) => {
+  if (video360Index.value >= videos.length) {
+    video360Index.value = 0
+  }
+})
+
+const switchVideoByStep = (videos, indexRef) => {
+  if (videos.value.length <= 1) return
+  indexRef.value = (indexRef.value + 1) % videos.value.length
+}
+
+const switchVisitVideo = () => {
+  switchVideoByStep(visitVideos, visitVideoIndex)
+}
+
+const switchVideo360 = () => {
+  console.log('switchVideo360 called');
+  switchVideoByStep(video360Videos, video360Index)
+}
 
 // Handle slide change
 const onSlideChange = (swiper) => {
@@ -605,4 +718,20 @@ const rightMenu = computed(() => [
 .page-fade-enter-from {
   opacity: 0;
 }
+
+.player-step {
+  @apply absolute z-[3] bottom-[0px] right-[-145px] w-[112px] gap-[16px] flex items-center justify-center;
+}
+.player-step button {
+  @apply w-[48px] h-[48px] cursor-pointer;
+}
+.player-step button:disabled,
+.player-step button.disabled {
+  @apply cursor-default opacity-40;
+}
+.player-step img {
+  @apply w-full h-full;
+  pointer-events: none;
+}
+
 </style> 
